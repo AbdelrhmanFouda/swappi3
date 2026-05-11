@@ -105,46 +105,80 @@ function Nav({ page, setPage, dark }) {
   const go = (id) => { setPage(id); setMenuOpen(false); };
 
   return (
-    <header className={"nav-shell" + (dark ? " dark" : "")}>
-      <div className="nav-inner">
-        <a onClick={() => go("home")} style={{cursor:"pointer", flexShrink:0}}><Brand /></a>
+    <>
+      <header className={"nav-shell" + (dark ? " dark" : "")}>
+        <div className="nav-inner">
+          <a onClick={() => go("home")} style={{cursor:"pointer", flexShrink:0}}><Brand /></a>
 
-        {/* Desktop links */}
-        <nav className={"nav-links" + (menuOpen ? " mob-open" : "")}>
-          {items.map(i => (
-            <a key={i.id} className={page === i.id ? "active" : ""} onClick={() => go(i.id)}>{i.label}</a>
-          ))}
-          {/* Mobile-only auth row inside menu */}
-          <div style={{borderTop:"1px solid var(--line)", marginTop:12, paddingTop:16, display:"flex", gap:10}}>
+          {/* Desktop nav links — hidden on mobile via CSS */}
+          <nav className="nav-links">
+            {items.map(i => (
+              <a key={i.id} className={page === i.id ? "active" : ""} onClick={() => go(i.id)}>{i.label}</a>
+            ))}
+          </nav>
+
+          {/* Desktop user row — hidden on mobile via CSS */}
+          <div className="row gap-12 center nav-user-row">
+            <a onClick={() => go("dashboard")} className="row gap-8 center" style={{cursor:"pointer", fontSize:14, fontWeight:500}}>
+              <Avatar initials="YO" size="sm" color="orange" />
+              <span style={{opacity:.8}}>Dashboard</span>
+            </a>
+            <button className="btn btn-sm btn-primary" onClick={() => go("auth")}>Sign in</button>
+          </div>
+
+          {/* Hamburger — shown only on mobile via CSS */}
+          <button
+            className="nav-mob-btn"
+            onClick={() => setMenuOpen(o => !o)}
+            aria-label="Toggle menu"
+            style={{
+              display:"none", background:"none",
+              border:"1px solid var(--line)", borderRadius:10,
+              width:40, height:40, alignItems:"center", justifyContent:"center",
+              cursor:"pointer", fontSize:18, flexShrink:0,
+              color: dark ? "#fff" : "var(--ink)"
+            }}
+          >{menuOpen ? "✕" : "☰"}</button>
+        </div>
+      </header>
+
+      {/* Mobile menu overlay — rendered OUTSIDE header so backdrop-filter doesn't trap it */}
+      {menuOpen && (
+        <div style={{
+          position:"fixed", inset:0, zIndex:500,
+          background:"var(--paper)",
+          display:"flex", flexDirection:"column",
+          overflowY:"auto",
+          paddingTop:61,
+        }}>
+          {/* Close bar */}
+          <div style={{display:"flex", justifyContent:"space-between", alignItems:"center", padding:"16px 20px", borderBottom:"1px solid var(--line)"}}>
+            <Brand />
+            <button onClick={() => setMenuOpen(false)} style={{background:"none", border:"1px solid var(--line)", borderRadius:10, width:40, height:40, display:"flex", alignItems:"center", justifyContent:"center", fontSize:20, cursor:"pointer", color:"var(--ink)"}}>✕</button>
+          </div>
+
+          {/* Nav links */}
+          <div style={{padding:"12px 16px", flex:1}}>
+            {items.map(i => (
+              <a key={i.id} onClick={() => go(i.id)} style={{
+                display:"block", padding:"14px 16px", fontSize:20,
+                fontWeight: page === i.id ? 700 : 500,
+                borderRadius:12, marginBottom:4, cursor:"pointer",
+                background: page === i.id ? "var(--cream-2)" : "transparent",
+                color: page === i.id ? "var(--ink)" : "var(--ink-2)",
+                borderLeft: page === i.id ? "3px solid var(--orange)" : "3px solid transparent",
+              }}>{i.label}</a>
+            ))}
+          </div>
+
+          {/* Auth buttons at the bottom */}
+          <div style={{padding:"20px 16px", borderTop:"1px solid var(--line)", display:"flex", gap:10}}>
             <button className="btn btn-ghost" style={{flex:1, justifyContent:"center"}} onClick={() => go("dashboard")}>Dashboard</button>
             <button className="btn btn-primary" style={{flex:1, justifyContent:"center"}} onClick={() => go("auth")}>Sign in</button>
           </div>
-        </nav>
-
-        {/* Desktop user row */}
-        <div className="row gap-12 center nav-user-row">
-          <a onClick={() => go("dashboard")} className="row gap-8 center" style={{cursor:"pointer", fontSize:14, fontWeight:500}}>
-            <Avatar initials="YO" size="sm" color="orange" />
-            <span style={{opacity:.8}}>Dashboard</span>
-          </a>
-          <button className="btn btn-sm btn-primary" onClick={() => go("auth")}>Sign in</button>
         </div>
-
-        {/* Hamburger — hidden on desktop via CSS */}
-        <button
-          className="nav-mob-btn"
-          onClick={() => setMenuOpen(o => !o)}
-          aria-label="Toggle menu"
-          style={{
-            display:"none", background:"none",
-            border:"1px solid var(--line)", borderRadius:10,
-            width:40, height:40, alignItems:"center", justifyContent:"center",
-            cursor:"pointer", fontSize:18, flexShrink:0,
-            color: dark ? "#fff" : "var(--ink)"
-          }}
-        >{menuOpen ? "✕" : "☰"}</button>
-      </div>
-    </header>
+      )}
+    </>
   );
 }
 
