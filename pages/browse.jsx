@@ -6,7 +6,7 @@ const { Avatar, Reveal, Placeholder, SkillCard } = window.SwappiAtoms;
 //  BROWSE
 // ============================================================
 
-function BrowsePage({ onBook }) {
+function BrowsePage({ onBook, setPage }) {
   const [cat, setCat] = useState("All");
   const [price, setPrice] = useState(150);
   const [minRating, setMinRating] = useState(0);
@@ -49,7 +49,7 @@ function BrowsePage({ onBook }) {
           </h1>
           <div style={{display:"flex", gap:12, marginTop:32, maxWidth:680}}>
             <input className="input" placeholder="Search skills, teachers, or topics…" value={query} onChange={(e)=>setQuery(e.target.value)} style={{height:56, fontSize:16, paddingLeft:48, backgroundImage:"url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'><circle cx='11' cy='11' r='7'/><path d='m20 20-3-3'/></svg>\")", backgroundRepeat:"no-repeat", backgroundPosition:"16px 50%"}}/>
-            <button className="btn btn-lg btn-primary">Search</button>
+            <button className="btn btn-lg btn-primary" onClick={() => window.showToast && window.showToast(`Showing results for "${query || "all skills"}"`, "🔍")}>Search</button>
           </div>
         </div>
       </section>
@@ -155,7 +155,7 @@ function BrowsePage({ onBook }) {
               <div style={{marginTop:48, padding:32, textAlign:"center", borderRadius:20, background:"linear-gradient(135deg, var(--blue-soft) 0%, var(--orange-soft) 100%)", border:"1px solid var(--line)"}}>
                 <h3 style={{fontFamily:"var(--f-serif)", fontWeight:400, fontSize:28, margin:0}}>Want us to find your perfect match?</h3>
                 <p style={{color:"var(--ink-2)", marginTop:8}}>Tell us what you can teach. We'll find the people who want it.</p>
-                <button className="btn btn-primary mt-16">Try Quick Match →</button>
+                <button className="btn btn-primary mt-16" onClick={() => setPage && setPage("auth")}>Try Quick Match →</button>
               </div>
             )}
           </div>

@@ -150,7 +150,7 @@ function AuthPage({ setPage }) {
                   <span>OR</span>
                   <div style={{flex:1, height:1, background:"var(--line)"}}></div>
                 </div>
-                <button className="btn btn-ghost" style={{justifyContent:"center", height:48}}>
+                <button className="btn btn-ghost" style={{justifyContent:"center", height:48}} onClick={() => window.showToast && window.showToast("Google sign-in coming soon — use email for now", "🔒")}>
                   <span style={{
                     width:18, height:18, borderRadius:"50%",
                     background:"conic-gradient(from 0deg, #ea4335, #fbbc04, #34a853, #4285f4, #ea4335)",

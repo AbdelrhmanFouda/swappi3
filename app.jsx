@@ -27,9 +27,9 @@ function App() {
     root.style.setProperty("--blue-soft", tint(tw.blue, 0.82));
 
     const fontMap = {
-      "Editorial serif": ["Instrument Serif", "DM Sans"],
-      "Geometric serif": ["Cormorant Garamond", "DM Sans"],
-      "All grotesque":   ["DM Sans", "DM Sans"],
+      "Editorial serif": ["Instrument Serif", "Nunito"],
+      "Geometric serif": ["Cormorant Garamond", "Nunito"],
+      "All grotesque":   ["Nunito", "Nunito"],
     };
     const [serif, sans] = fontMap[tw.font] || fontMap["Editorial serif"];
     root.style.setProperty("--f-serif", `"${serif}", Georgia, serif`);
@@ -54,10 +54,10 @@ function App() {
   const renderPage = () => {
     switch(page) {
       case "home": return <HomePage setPage={setPage} onBook={openBooking}/>;
-      case "browse": return <BrowsePage onBook={openBooking}/>;
-      case "profile": return <ProfilePage onBook={openBooking}/>;
+      case "browse": return <BrowsePage onBook={openBooking} setPage={setPage}/>;
+      case "profile": return <ProfilePage onBook={openBooking} setPage={setPage}/>;
       case "dashboard": return <DashboardPage setPage={setPage} onBook={openBooking}/>;
-      case "workshops": return <WorkshopsPage onBook={openBooking}/>;
+      case "workshops": return <WorkshopsPage onBook={openBooking} setPage={setPage}/>;
       case "pricing": return <PricingPage setPage={setPage}/>;
       case "auth": return <AuthPage setPage={setPage}/>;
       default: return <HomePage setPage={setPage} onBook={openBooking}/>;

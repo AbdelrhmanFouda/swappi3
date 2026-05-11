@@ -5,11 +5,21 @@ const { useState, useEffect, useRef } = React;
 //  Shared atoms
 // ============================================================
 
+// Global imperative toast — callable from any button handler
+window.showToast = function(text, emoji) {
+  const existing = document.querySelectorAll(".toast");
+  existing.forEach(t => t.remove());
+  const el = document.createElement("div");
+  el.className = "toast";
+  el.innerHTML = `<span style="margin-right:8px;color:var(--orange)">${emoji||"✓"}</span>${text}`;
+  document.body.appendChild(el);
+  setTimeout(() => { el.style.opacity = "0"; el.style.transition = "opacity .4s"; setTimeout(() => el.remove(), 400); }, 3000);
+};
+
 function Brand() {
   return (
     <div className="brand">
-      <div className="brand-mark"></div>
-      <span>swappi</span>
+      <img src="logo.png" alt="swappi" style={{height:38, objectFit:"contain", mixBlendMode:"multiply"}}/>
     </div>
   );
 }
@@ -111,8 +121,8 @@ function Footer({ setPage }) {
               A peer-to-peer platform for trading what you know. Teach a little, learn a lot.
             </p>
             <div className="row gap-8 mt-24">
-              {["x","ig","in","yt"].map(n =>
-                <div key={n} style={{width:36,height:36,borderRadius:10,border:"1px solid var(--line-dark)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontFamily:"var(--f-mono)",color:"rgba(255,255,255,0.7)",cursor:"pointer"}}>{n}</div>
+              {[["x","Twitter/X"],["ig","Instagram"],["in","LinkedIn"],["yt","YouTube"]].map(([n, name]) =>
+                <div key={n} onClick={() => window.showToast && window.showToast(`Follow us on ${name} — coming soon`, "📣")} style={{width:36,height:36,borderRadius:10,border:"1px solid var(--line-dark)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontFamily:"var(--f-mono)",color:"rgba(255,255,255,0.7)",cursor:"pointer"}}>{n}</div>
               )}
             </div>
           </div>
@@ -144,7 +154,7 @@ function FootCol({ title, items, setPage }) {
       <div style={{fontSize:12, letterSpacing:".14em", textTransform:"uppercase", color:"rgba(255,255,255,0.55)", marginBottom:16}}>{title}</div>
       <div className="col gap-12">
         {items.map(([label, target], i) =>
-          <a key={i} onClick={() => target && setPage && setPage(target)} style={{cursor:target?"pointer":"default", fontSize:14}}>{label}</a>
+          <a key={i} onClick={() => target ? (setPage && setPage(target)) : window.showToast && window.showToast(`${label} — coming soon`, "📌")} style={{cursor:"pointer", fontSize:14}}>{label}</a>
         )}
       </div>
     </div>
