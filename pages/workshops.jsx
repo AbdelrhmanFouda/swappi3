@@ -51,10 +51,10 @@ function WorkshopsPage({ onBook, setPage }) {
       {(filter === "All" || filter === "In-person" || filter === "This week") && (
         <section className="wrap">
           <div className="card" style={{padding:0, overflow:"hidden", display:"grid", gridTemplateColumns: isMobile ? "1fr" : "1.1fr 1fr", minHeight: isMobile ? "auto" : 380}}>
-            <img src="https://images.unsplash.com/photo-1574781625673-7e4aa09c47af?w=700&q=80&auto=format&fit=crop" alt="Sourdough workshop" style={{width:"100%", height: isMobile ? 220 : "100%", objectFit:"cover", display:"block"}} />
+            <img src="https://images.unsplash.com/photo-1574781625673-7e4aa09c47af?w=700&q=80&auto=format&fit=crop" alt="Sourdough workshop" style={{width:"100%", aspectRatio: isMobile ? "3/2" : "auto", height: isMobile ? "auto" : "100%", objectFit:"cover", objectPosition:"center 40%", display:"block"}} />
             <div style={{padding: isMobile ? 24 : 48, display:"flex", flexDirection:"column", justifyContent:"center"}}>
               <span className="pill pill-orange">★ This weekend</span>
-              <h2 className="display" style={{fontSize:44, fontWeight:400, margin:"16px 0 12px", lineHeight:1.05}}>Intro to Sourdough — Sunday, Maadi</h2>
+              <h2 className="display" style={{fontSize: isMobile ? 28 : 44, fontWeight:400, margin:"16px 0 12px", lineHeight:1.1}}>Intro to Sourdough — Sunday, Maadi</h2>
               <p style={{color:"var(--ink-3)", fontSize:16, lineHeight:1.6, margin:0}}>
                 Three hours with Hana in a working kitchen. You'll leave with a starter, a loaf, and the confidence to keep going.
               </p>

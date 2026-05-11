@@ -5,7 +5,7 @@ const { Nav, Footer } = window.SwappiAtoms;
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "accent": "#f5a623",
   "blue": "#3756e8",
-  "font": "Editorial serif",
+  "font": "All grotesque",
   "density": "Dense",
   "darkNav": false
 }/*EDITMODE-END*/;

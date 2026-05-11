@@ -73,9 +73,9 @@ button { font-family: inherit; cursor: pointer; }
 /* — type rhythm */
 .display {
   font-family: var(--f-serif);
-  font-weight: 400;
-  letter-spacing: -0.005em;
-  line-height: 1.05;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
   font-optical-sizing: auto;
 }
 .eyebrow {
