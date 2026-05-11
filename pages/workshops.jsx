@@ -51,7 +51,7 @@ function WorkshopsPage({ onBook, setPage }) {
       {(filter === "All" || filter === "In-person" || filter === "This week") && (
         <section className="wrap">
           <div className="card" style={{padding:0, overflow:"hidden", display:"grid", gridTemplateColumns: isMobile ? "1fr" : "1.1fr 1fr", minHeight: isMobile ? "auto" : 380}}>
-            <img src="https://images.unsplash.com/photo-1574781625673-7e4aa09c47af?w=700&q=80&auto=format&fit=crop" alt="Sourdough workshop" style={{width:"100%", aspectRatio: isMobile ? "3/2" : "auto", height: isMobile ? "auto" : "100%", objectFit:"cover", objectPosition:"center 40%", display:"block"}} />
+            <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=700&h=420&q=80&auto=format&fit=crop" alt="Sourdough workshop" style={{width:"100%", aspectRatio: isMobile ? "3/2" : "auto", height: isMobile ? "auto" : "100%", objectFit:"cover", objectPosition:"center 50%", display:"block"}} />
             <div style={{padding: isMobile ? 24 : 48, display:"flex", flexDirection:"column", justifyContent:"center"}}>
               <span className="pill pill-orange">★ This weekend</span>
               <h2 className="display" style={{fontSize: isMobile ? 28 : 44, fontWeight:400, margin:"16px 0 12px", lineHeight:1.1}}>Intro to Sourdough — Sunday, Maadi</h2>
