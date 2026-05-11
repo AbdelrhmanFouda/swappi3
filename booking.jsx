@@ -66,7 +66,7 @@ function BookingModal({ skill, onClose, onComplete }) {
             <>
               <h2 style={{margin:0, fontFamily:"var(--f-serif)", fontWeight:400, fontSize:28}}>Pick a time that works.</h2>
               <p style={{color:"var(--ink-3)", fontSize:14, marginTop:6}}>{skill.provider} typically responds within an hour.</p>
-              <div style={{display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:10, marginTop:20}}>
+              <div className="grid-3" style={{gap:10, marginTop:20}}>
                 {slots.map((sl,i) => {
                   const id = sl.date+sl.time;
                   const sel = slot === id;

@@ -49,7 +49,7 @@ function ProfilePage({ onBook }) {
     <main data-screen-label="Profile" style={{background:"var(--cream)", paddingBottom:120}}>
       {/* Cover */}
       <section style={{position:"relative"}}>
-        <div style={{position:"relative", height:300, overflow:"hidden"}}>
+        <div style={{position:"relative", height:"clamp(180px,40vw,300px)", overflow:"hidden"}}>
           <img src="https://images.unsplash.com/photo-1499781350541-7783f6c6a0c8?w=1400&h=360&q=80&auto=format&fit=crop" alt="Cairo golden hour" style={{position:"absolute", inset:0, width:"100%", height:"100%", objectFit:"cover", objectPosition:"center 60%"}} />
           <div style={{position:"absolute", inset:0, background:"linear-gradient(180deg, transparent 40%, var(--cream) 100%)"}}></div>
         </div>
@@ -67,7 +67,7 @@ function ProfilePage({ onBook }) {
               <div style={{position:"absolute", right:-8, bottom:-8, background:"var(--blue)", color:"#fff", width:32, height:32, borderRadius:"50%", display:"flex", alignItems:"center", justifyContent:"center", border:"3px solid var(--cream)", fontSize:14}}>✓</div>
             </div>
 
-            <div style={{flex:1, minWidth:300}}>
+            <div style={{flex:1, minWidth:"min(300px,100%)"}}>
               <div className="row gap-8 center">
                 <span className="pill pill-orange">★ Top rated</span>
                 <span className="pill">Responds in ~1h</span>
@@ -77,24 +77,24 @@ function ProfilePage({ onBook }) {
               <p style={{color:"var(--ink-3)", margin:"6px 0 0", fontSize:17}}>Arabic teacher & translator · Cairo, Egypt</p>
             </div>
 
-            <div className="row gap-8">
+            <div className="row mob-wrap gap-8">
               <button className="btn btn-ghost" onClick={share}>↗ Share</button>
               <button className="btn btn-ghost" onClick={toggleSave} style={{color: saved ? "var(--danger)" : undefined}}>
                 {saved ? "♥ Saved" : "♡ Save"}
               </button>
-              <button className="btn btn-primary" onClick={() => onBook && onBook(SWAPPI.skills[0])}>Request a session</button>
+              <button className="btn btn-primary mob-full" style={{justifyContent:"center"}} onClick={() => onBook && onBook(SWAPPI.skills[0])}>Request a session</button>
             </div>
           </div>
 
           {/* Stats row */}
-          <div style={{display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:0, marginTop:48, border:"1px solid var(--line)", borderRadius:20, overflow:"hidden", background:"var(--paper)"}}>
+          <div style={{display:"grid", gridTemplateColumns:"repeat(2,1fr)", gap:0, marginTop:32, border:"1px solid var(--line)", borderRadius:20, overflow:"hidden", background:"var(--paper)"}}>
             {[
               {label:"Swaps completed", val:"312", sub:"since 2023"},
               {label:"Average rating",  val:"4.9★", sub:"142 reviews"},
               {label:"Response time",   val:"<1 hr", sub:"morning + evening"},
               {label:"Repeat learners", val:"68%",  sub:"come back for more"},
             ].map((s, i) => (
-              <div key={i} style={{padding:"28px 32px", borderRight:i<3?"1px solid var(--line)":"none"}}>
+              <div key={i} style={{padding:"20px 24px", borderRight:i%2===0?"1px solid var(--line)":"none", borderTop:i>=2?"1px solid var(--line)":"none"}}>
                 <div className="display" style={{fontSize:36}}>{s.val}</div>
                 <div style={{fontSize:12, color:"var(--ink-3)", textTransform:"uppercase", letterSpacing:".1em", marginTop:6}}>{s.label}</div>
                 <div style={{fontSize:13, color:"var(--ink-3)", marginTop:8}}>{s.sub}</div>
@@ -103,7 +103,7 @@ function ProfilePage({ onBook }) {
           </div>
 
           {/* About */}
-          <div style={{marginTop:64, display:"grid", gridTemplateColumns:"1.6fr 1fr", gap:48}}>
+          <div style={{marginTop:40, display:"grid", gridTemplateColumns:"minmax(0,1.6fr) minmax(0,1fr)", gap:"clamp(24px,4vw,48px)", flexWrap:"wrap"}} className="mob-block">
             <div>
               <h2 className="display" style={{fontSize:36, fontWeight:400, margin:0}}>About me</h2>
               <p style={{fontSize:17, lineHeight:1.7, color:"var(--ink-2)", marginTop:16}}>
@@ -151,7 +151,7 @@ function ProfilePage({ onBook }) {
             </div>
 
             {tab === "offered" && (
-              <div style={{display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:24}}>
+              <div className="grid-3">
                 {offered.map(s => <SkillCard key={s.id} s={s} onBook={onBook}/>)}
               </div>
             )}

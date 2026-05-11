@@ -87,14 +87,14 @@ function PricingPage({ setPage }) {
       </section>
 
       <section className="wrap" style={{marginTop:48}}>
-        <div style={{display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:24}}>
+        <div className="grid-3" style={{alignItems:"start"}}>
           {tiers.map(t => (
             <div key={t.name} className="card" style={{
-              padding:36,
+              padding:32,
               position:"relative",
               border: t.popular ? "2px solid var(--orange)" : "1px solid var(--line)",
               boxShadow: t.popular ? "0 0 0 6px color-mix(in oklch, var(--orange) 14%, transparent), var(--shadow-2)" : "var(--shadow-1)",
-              transform: t.popular ? "translateY(-8px)" : "none",
+              transform: "none",
               background: "var(--paper)"
             }}>
               {t.popular && <span className="pill pill-orange" style={{position:"absolute", top:-12, left:36}}>★ Most popular</span>}
@@ -132,11 +132,11 @@ function PricingPage({ setPage }) {
       {/* FAQ */}
       <section className="wrap" style={{marginTop:120}}>
         <div className="row between" style={{flexWrap:"wrap", gap:48}}>
-          <div style={{maxWidth:340}}>
+          <div style={{maxWidth:340, minWidth:200}}>
             <span className="eyebrow">FAQ</span>
             <h2 className="display" style={{fontSize:48, margin:"12px 0 0"}}>Common questions, honest answers.</h2>
           </div>
-          <div style={{flex:1, minWidth:480, maxWidth:760}}>
+          <div style={{flex:1, minWidth: "min(480px, 100%)", maxWidth:760}}>
             {[
               ["Do I have to pay to use Swappi?", "No. The Free tier is forever free and includes swaps, messages, and verification. Pro is only for people who want unlimited matches or workshop discounts."],
               ["What's a 'swap'?", "Two people teach each other something. No money changes hands. Most of our best stories started as swaps."],

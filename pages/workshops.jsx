@@ -1,6 +1,7 @@
 /* global React, SWAPPI, SwappiAtoms */
 const { useState, useMemo } = React;
 const { Avatar, Placeholder } = window.SwappiAtoms;
+const useIsMobile = window.useIsMobile || (() => false);
 
 // ============================================================
 //  WORKSHOPS — filter wired, all buttons functional
@@ -9,6 +10,7 @@ const { Avatar, Placeholder } = window.SwappiAtoms;
 function WorkshopsPage({ onBook, setPage }) {
   const [filter, setFilter] = useState("All");
   const [detail, setDetail] = useState(null);
+  const isMobile = useIsMobile();
 
   const thisWeekTitles = new Set(["Intro to Sourdough", "Cairo Sketch Crawl"]);
 
@@ -31,7 +33,7 @@ function WorkshopsPage({ onBook, setPage }) {
             <h1 className="display" style={{fontSize:"clamp(40px,6vw,80px)", margin:0, maxWidth:900}}>
               Small groups. Real rooms. <span style={{color:"var(--orange)"}}>Done in a weekend.</span>
             </h1>
-            <div className="row gap-8" style={{alignItems:"flex-end"}}>
+            <div className="row mob-wrap gap-8" style={{alignItems:"flex-end"}}>
               {["All","Online","In-person","This week"].map(f => (
                 <button key={f} className="pill" onClick={() => setFilter(f)} style={{
                   cursor:"pointer", height:36, padding:"0 16px",
@@ -48,15 +50,15 @@ function WorkshopsPage({ onBook, setPage }) {
       {/* Featured */}
       {(filter === "All" || filter === "In-person" || filter === "This week") && (
         <section className="wrap">
-          <div className="card" style={{padding:0, overflow:"hidden", display:"grid", gridTemplateColumns:"1.1fr 1fr", minHeight:380}}>
-            <img src="https://images.unsplash.com/photo-1574781625673-7e4aa09c47af?w=700&q=80&auto=format&fit=crop" alt="Sourdough workshop" style={{width:"100%", height:"100%", objectFit:"cover", display:"block"}} />
-            <div style={{padding:48, display:"flex", flexDirection:"column", justifyContent:"center"}}>
+          <div className="card" style={{padding:0, overflow:"hidden", display:"grid", gridTemplateColumns: isMobile ? "1fr" : "1.1fr 1fr", minHeight: isMobile ? "auto" : 380}}>
+            <img src="https://images.unsplash.com/photo-1574781625673-7e4aa09c47af?w=700&q=80&auto=format&fit=crop" alt="Sourdough workshop" style={{width:"100%", height: isMobile ? 220 : "100%", objectFit:"cover", display:"block"}} />
+            <div style={{padding: isMobile ? 24 : 48, display:"flex", flexDirection:"column", justifyContent:"center"}}>
               <span className="pill pill-orange">★ This weekend</span>
               <h2 className="display" style={{fontSize:44, fontWeight:400, margin:"16px 0 12px", lineHeight:1.05}}>Intro to Sourdough — Sunday, Maadi</h2>
               <p style={{color:"var(--ink-3)", fontSize:16, lineHeight:1.6, margin:0}}>
                 Three hours with Hana in a working kitchen. You'll leave with a starter, a loaf, and the confidence to keep going.
               </p>
-              <div className="row gap-24 mt-24" style={{paddingTop:20, borderTop:"1px solid var(--line)"}}>
+              <div className="row mob-wrap gap-24 mt-24" style={{paddingTop:20, borderTop:"1px solid var(--line)"}}>
                 <Meta label="When" val="Sun · 9am"/>
                 <Meta label="Where" val="Maadi Kitchen Co-op"/>
                 <Meta label="Seats" val="6 of 8 taken"/>
@@ -88,7 +90,7 @@ function WorkshopsPage({ onBook, setPage }) {
             <button className="btn btn-primary mt-24" onClick={() => setFilter("All")}>Show all workshops</button>
           </div>
         ) : (
-          <div style={{display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:24}}>
+          <div className="grid-3">
             {filtered.map((w, i) => (
               <article key={i} className="card" style={{padding:0, overflow:"hidden"}}>
                 {w.img

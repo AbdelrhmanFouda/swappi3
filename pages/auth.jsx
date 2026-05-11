@@ -1,11 +1,13 @@
 /* global React */
 const { useState } = React;
+const useIsMobile = window.useIsMobile || (() => false);
 
 // ============================================================
 //  AUTH (Login / Signup)
 // ============================================================
 
 function AuthPage({ setPage }) {
+  const isMobile = useIsMobile();
   const [mode, setMode] = useState("signup");
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({ email:"", password:"", name:"", teach:"", learn:"" });
@@ -32,9 +34,9 @@ function AuthPage({ setPage }) {
   };
 
   return (
-    <main data-screen-label="Auth" style={{height:"calc(100vh - 65px)", display:"grid", gridTemplateColumns:"1.1fr 1fr", background:"var(--cream)"}}>
-      {/* Left: brand panel */}
-      <section className="surface-dark" style={{padding:48, display:"flex", flexDirection:"column", justifyContent:"space-between", position:"relative", overflow:"hidden"}}>
+    <main data-screen-label="Auth" style={{minHeight:"calc(100vh - 65px)", display:"grid", gridTemplateColumns: isMobile ? "1fr" : "1.1fr 1fr", background:"var(--cream)"}}>
+      {/* Left: brand panel — hidden on mobile */}
+      {!isMobile && <section className="surface-dark" style={{padding:48, display:"flex", flexDirection:"column", justifyContent:"space-between", position:"relative", overflow:"hidden"}}>
         <div className="mesh-bg"></div>
         <div style={{position:"relative", zIndex:2}}>
           <div className="row gap-8 center">
@@ -59,11 +61,11 @@ function AuthPage({ setPage }) {
           <span>EN · AR · FR</span>
           <span>©2026</span>
         </div>
-      </section>
+      </section>}
 
       {/* Right: form */}
-      <section style={{padding:"48px clamp(48px,8vw,120px)", display:"flex", flexDirection:"column", justifyContent:"center", position:"relative"}}>
-        <div style={{position:"absolute", top:48, right:48, fontSize:13, color:"var(--ink-3)"}}>
+      <section style={{padding: isMobile ? "40px 24px" : "48px clamp(48px,8vw,120px)", display:"flex", flexDirection:"column", justifyContent:"center", position:"relative"}}>
+        <div style={{marginBottom:24, fontSize:13, color:"var(--ink-3)", textAlign: isMobile ? "center" : "right"}}>
           {mode === "signup" ? "Already a member?" : "New to Swappi?"}{" "}
           <a onClick={()=>{ setMode(mode==="signup"?"login":"signup"); setStep(1); }} style={{color:"var(--blue)", fontWeight:600, cursor:"pointer"}}>
             {mode === "signup" ? "Sign in" : "Create account"}

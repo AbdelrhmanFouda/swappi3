@@ -15,6 +15,8 @@ function BrowsePage({ onBook, setPage }) {
   const [sort, setSort] = useState("Recommended");
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
+  const [filterOpen, setFilterOpen] = useState(false);
+  const isMobile = window.useIsMobile ? window.useIsMobile() : false;
 
   useEffect(() => {
     setLoading(true);
@@ -39,12 +41,75 @@ function BrowsePage({ onBook, setPage }) {
     return r;
   }, [cat, price, minRating, modes, swapOnly, sort, query]);
 
+  const resetFilters = () => {
+    setCat("All"); setPrice(150); setMinRating(0);
+    setModes({online:true,inperson:true}); setSwapOnly(false); setQuery("");
+  };
+
+  const FiltersPane = () => (
+    <div className="card" style={{padding:24}}>
+      <div className="row between center" style={{marginBottom:20}}>
+        <strong style={{fontSize:14}}>Filters</strong>
+        <div className="row gap-8">
+          <button className="btn btn-sm btn-ghost" style={{fontSize:12}} onClick={resetFilters}>Reset</button>
+          {isMobile && (
+            <button className="btn btn-sm btn-primary" onClick={() => setFilterOpen(false)}>
+              Apply ({filtered.length})
+            </button>
+          )}
+        </div>
+      </div>
+
+      <FilterGroup title="Category">
+        <div style={{display:"flex", flexWrap:"wrap", gap:6}}>
+          {SWAPPI.categories.map(c => (
+            <button key={c} onClick={()=>setCat(c)} className="pill" style={{
+              cursor:"pointer", background: cat===c?"var(--ink)":"var(--cream-2)", color: cat===c?"var(--cream)":"var(--ink-2)", border:"1px solid transparent"
+            }}>{c}</button>
+          ))}
+        </div>
+      </FilterGroup>
+
+      <FilterGroup title={`Max price · $${price}`}>
+        <input type="range" min={20} max={200} value={price} onChange={(e)=>setPrice(+e.target.value)} style={{width:"100%", accentColor:"oklch(0.62 0.18 42)"}}/>
+        <div className="row between" style={{fontSize:11, color:"var(--ink-3)", marginTop:4}}><span>$20</span><span>$200</span></div>
+      </FilterGroup>
+
+      <FilterGroup title="Min rating">
+        <div style={{display:"flex", flexWrap:"wrap", gap:6}}>
+          {[0,3.5,4,4.5,4.8].map(r => (
+            <button key={r} onClick={()=>setMinRating(r)} className="pill" style={{
+              cursor:"pointer", background: minRating===r?"var(--ink)":"var(--cream-2)", color: minRating===r?"var(--cream)":"var(--ink-2)", border:"1px solid transparent"
+            }}>{r===0?"Any":r+"★"}</button>
+          ))}
+        </div>
+      </FilterGroup>
+
+      <FilterGroup title="Format">
+        <CheckRow label="Online" checked={modes.online} onChange={()=>setModes(m=>({...m, online:!m.online}))}/>
+        <CheckRow label="In-person" checked={modes.inperson} onChange={()=>setModes(m=>({...m, inperson:!m.inperson}))}/>
+        <CheckRow label="Swap-friendly only" checked={swapOnly} onChange={()=>setSwapOnly(s=>!s)}/>
+      </FilterGroup>
+
+      <FilterGroup title="Availability" last>
+        <div style={{display:"grid", gridTemplateColumns:"repeat(7, 1fr)", gap:4}}>
+          {Array.from({length:21}, (_,i) => (
+            <div key={i} style={{aspectRatio:"1", borderRadius:6, background: [3,7,9,11,14,16,18].includes(i) ? "var(--orange-soft)" : "var(--cream-2)", fontSize:10, display:"flex", alignItems:"center", justifyContent:"center", color:"var(--ink-3)", cursor:"pointer"}}>{i+1}</div>
+          ))}
+        </div>
+        <div className="row gap-8" style={{marginTop:8, fontSize:11, color:"var(--ink-3)"}}>
+          <span><span style={{display:"inline-block",width:10,height:10,background:"var(--orange-soft)",borderRadius:3,verticalAlign:"middle",marginRight:4}}></span>Has openings</span>
+        </div>
+      </FilterGroup>
+    </div>
+  );
+
   return (
     <main data-screen-label="Browse" style={{background:"var(--cream)", paddingBottom:120}}>
       <section style={{padding:"56px 0 32px"}}>
         <div className="wrap">
           <span className="eyebrow">Browse · 1,832 skills</span>
-          <h1 className="display" style={{fontSize:"clamp(40px, 6vw, 80px)", margin:"12px 0 0"}}>
+          <h1 className="display" style={{fontSize:"clamp(32px, 6vw, 80px)", margin:"12px 0 0"}}>
             What do you want to learn today?
           </h1>
           <div style={{display:"flex", gap:12, marginTop:32, maxWidth:680}}>
@@ -55,107 +120,91 @@ function BrowsePage({ onBook, setPage }) {
       </section>
 
       <section>
-        <div className="wrap" style={{display:"grid", gridTemplateColumns:"280px 1fr", gap:40}}>
-          {/* Filters */}
-          <aside style={{position:"sticky", top:96, alignSelf:"flex-start", height:"fit-content"}}>
-            <div className="card" style={{padding:24}}>
-              <div className="row between center" style={{marginBottom:20}}>
-                <strong style={{fontSize:14}}>Filters</strong>
-                <button className="btn btn-sm btn-ghost" style={{fontSize:12}} onClick={()=>{
-                  setCat("All"); setPrice(150); setMinRating(0); setModes({online:true,inperson:true}); setSwapOnly(false); setQuery("");
-                }}>Reset</button>
-              </div>
-
-              <FilterGroup title="Category">
-                <div style={{display:"flex", flexWrap:"wrap", gap:6}}>
-                  {SWAPPI.categories.map(c => (
-                    <button key={c} onClick={()=>setCat(c)} className="pill" style={{
-                      cursor:"pointer", background: cat===c?"var(--ink)":"var(--cream-2)", color: cat===c?"var(--cream)":"var(--ink-2)", border:"1px solid transparent"
-                    }}>{c}</button>
-                  ))}
-                </div>
-              </FilterGroup>
-
-              <FilterGroup title={`Max price · $${price}`}>
-                <input type="range" min={20} max={200} value={price} onChange={(e)=>setPrice(+e.target.value)} style={{width:"100%", accentColor:"oklch(0.62 0.18 42)"}}/>
-                <div className="row between" style={{fontSize:11, color:"var(--ink-3)", marginTop:4}}><span>$20</span><span>$200</span></div>
-              </FilterGroup>
-
-              <FilterGroup title="Min rating">
-                <div className="row gap-4">
-                  {[0,3.5,4,4.5,4.8].map(r => (
-                    <button key={r} onClick={()=>setMinRating(r)} className="pill" style={{
-                      cursor:"pointer", background: minRating===r?"var(--ink)":"var(--cream-2)", color: minRating===r?"var(--cream)":"var(--ink-2)", border:"1px solid transparent"
-                    }}>{r===0?"Any":r+"★"}</button>
-                  ))}
-                </div>
-              </FilterGroup>
-
-              <FilterGroup title="Format">
-                <CheckRow label="Online" checked={modes.online} onChange={()=>setModes(m=>({...m, online:!m.online}))}/>
-                <CheckRow label="In-person" checked={modes.inperson} onChange={()=>setModes(m=>({...m, inperson:!m.inperson}))}/>
-                <CheckRow label="Swap-friendly only" checked={swapOnly} onChange={()=>setSwapOnly(s=>!s)}/>
-              </FilterGroup>
-
-              <FilterGroup title="Availability" last>
-                <div style={{display:"grid", gridTemplateColumns:"repeat(7, 1fr)", gap:4}}>
-                  {Array.from({length:21}, (_,i) => (
-                    <div key={i} style={{aspectRatio:"1", borderRadius:6, background: [3,7,9,11,14,16,18].includes(i) ? "var(--orange-soft)" : "var(--cream-2)", fontSize:10, display:"flex", alignItems:"center", justifyContent:"center", color:"var(--ink-3)", cursor:"pointer"}}>{i+1}</div>
-                  ))}
-                </div>
-                <div className="row gap-8" style={{marginTop:8, fontSize:11, color:"var(--ink-3)"}}>
-                  <span><span style={{display:"inline-block",width:10,height:10,background:"var(--orange-soft)",borderRadius:3,verticalAlign:"middle",marginRight:4}}></span>Has openings</span>
-                </div>
-              </FilterGroup>
-            </div>
-          </aside>
-
-          {/* Grid */}
-          <div>
-            <div className="row between center" style={{marginBottom:24}}>
+        <div className="wrap">
+          {/* Mobile: filter toggle bar */}
+          {isMobile && (
+            <div className="row between center" style={{marginBottom:16, padding:"12px 0", borderBottom:"1px solid var(--line)"}}>
               <span style={{fontSize:14, color:"var(--ink-3)"}}>{loading?"Updating…":`${filtered.length} results`}</span>
-              <div className="row gap-8 center">
-                <span style={{fontSize:13, color:"var(--ink-3)"}}>Sort</span>
-                <select value={sort} onChange={(e)=>setSort(e.target.value)} className="input" style={{height:38, width:180, fontSize:13}}>
+              <div className="row gap-8">
+                <select value={sort} onChange={(e)=>setSort(e.target.value)} className="input" style={{height:36, width:140, fontSize:13}}>
                   <option>Recommended</option>
                   <option>Top rated</option>
                   <option>Price · Low</option>
                   <option>Price · High</option>
                 </select>
+                <button className="btn btn-sm btn-ghost" onClick={() => setFilterOpen(o=>!o)} style={{gap:6}}>
+                  ⚙ Filters{cat!=="All"||price<150||minRating>0||swapOnly ? " ·" : ""}
+                </button>
               </div>
             </div>
+          )}
 
-            {loading ? (
-              <div style={{display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:24}}>
-                {Array.from({length:6}).map((_,i)=>(
-                  <div key={i} className="card" style={{padding:0, overflow:"hidden"}}>
-                    <div className="skel" style={{aspectRatio:"4/3", borderRadius:0}}></div>
-                    <div style={{padding:18}}>
-                      <div className="skel" style={{height:18, width:"80%"}}></div>
-                      <div className="skel" style={{height:14, width:"50%", marginTop:12}}></div>
-                      <div className="skel" style={{height:30, width:"100%", marginTop:18}}></div>
+          <div style={{display:"grid", gridTemplateColumns: isMobile ? "1fr" : "280px 1fr", gap:40}}>
+            {/* Filters sidebar — desktop sticky / mobile fullscreen overlay */}
+            {!isMobile ? (
+              <aside style={{position:"sticky", top:96, alignSelf:"flex-start", height:"fit-content"}}>
+                <FiltersPane />
+              </aside>
+            ) : filterOpen ? (
+              <div style={{
+                position:"fixed", inset:0, top:61, zIndex:200,
+                background:"var(--paper)", overflowY:"auto", padding:16
+              }}>
+                <FiltersPane />
+              </div>
+            ) : null}
+
+            {/* Results grid — hidden on mobile while filter drawer is open */}
+            {(!isMobile || !filterOpen) && (
+              <div>
+                {!isMobile && (
+                  <div className="row between center" style={{marginBottom:24}}>
+                    <span style={{fontSize:14, color:"var(--ink-3)"}}>{loading?"Updating…":`${filtered.length} results`}</span>
+                    <div className="row gap-8 center">
+                      <span style={{fontSize:13, color:"var(--ink-3)"}}>Sort</span>
+                      <select value={sort} onChange={(e)=>setSort(e.target.value)} className="input" style={{height:38, width:180, fontSize:13}}>
+                        <option>Recommended</option>
+                        <option>Top rated</option>
+                        <option>Price · Low</option>
+                        <option>Price · High</option>
+                      </select>
                     </div>
                   </div>
-                ))}
-              </div>
-            ) : filtered.length === 0 ? (
-              <div className="card" style={{padding:80, textAlign:"center"}}>
-                <div style={{fontFamily:"var(--f-serif)", fontSize:48, color:"var(--ink-4)"}}>∅</div>
-                <h3 style={{fontFamily:"var(--f-serif)", fontSize:28, fontWeight:400, marginTop:16}}>Nothing matches just yet.</h3>
-                <p style={{color:"var(--ink-3)", marginTop:8}}>Try widening your filters or saving this search — we'll ping you when someone joins.</p>
-                <button className="btn btn-primary mt-24" onClick={()=>{ setCat("All"); setPrice(200); setMinRating(0); }}>Reset filters</button>
-              </div>
-            ) : (
-              <div style={{display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:24}}>
-                {filtered.map(s => <SkillCard key={s.id} s={s} onBook={onBook} />)}
-              </div>
-            )}
+                )}
 
-            {!loading && filtered.length > 0 && (
-              <div style={{marginTop:48, padding:32, textAlign:"center", borderRadius:20, background:"linear-gradient(135deg, var(--blue-soft) 0%, var(--orange-soft) 100%)", border:"1px solid var(--line)"}}>
-                <h3 style={{fontFamily:"var(--f-serif)", fontWeight:400, fontSize:28, margin:0}}>Want us to find your perfect match?</h3>
-                <p style={{color:"var(--ink-2)", marginTop:8}}>Tell us what you can teach. We'll find the people who want it.</p>
-                <button className="btn btn-primary mt-16" onClick={() => setPage && setPage("auth")}>Try Quick Match →</button>
+                {loading ? (
+                  <div className="grid-3">
+                    {Array.from({length:6}).map((_,i)=>(
+                      <div key={i} className="card" style={{padding:0, overflow:"hidden"}}>
+                        <div className="skel" style={{aspectRatio:"4/3", borderRadius:0}}></div>
+                        <div style={{padding:18}}>
+                          <div className="skel" style={{height:18, width:"80%"}}></div>
+                          <div className="skel" style={{height:14, width:"50%", marginTop:12}}></div>
+                          <div className="skel" style={{height:30, width:"100%", marginTop:18}}></div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : filtered.length === 0 ? (
+                  <div className="card" style={{padding:48, textAlign:"center"}}>
+                    <div style={{fontFamily:"var(--f-serif)", fontSize:48, color:"var(--ink-4)"}}>∅</div>
+                    <h3 style={{fontFamily:"var(--f-serif)", fontSize:28, fontWeight:400, marginTop:16}}>Nothing matches just yet.</h3>
+                    <p style={{color:"var(--ink-3)", marginTop:8}}>Try widening your filters or saving this search — we'll ping you when someone joins.</p>
+                    <button className="btn btn-primary mt-24" onClick={()=>{ setCat("All"); setPrice(200); setMinRating(0); }}>Reset filters</button>
+                  </div>
+                ) : (
+                  <div className="grid-3">
+                    {filtered.map(s => <SkillCard key={s.id} s={s} onBook={onBook} />)}
+                  </div>
+                )}
+
+                {!loading && filtered.length > 0 && (
+                  <div style={{marginTop:48, padding:32, textAlign:"center", borderRadius:20, background:"linear-gradient(135deg, var(--blue-soft) 0%, var(--orange-soft) 100%)", border:"1px solid var(--line)"}}>
+                    <h3 style={{fontFamily:"var(--f-serif)", fontWeight:400, fontSize:28, margin:0}}>Want us to find your perfect match?</h3>
+                    <p style={{color:"var(--ink-2)", marginTop:8}}>Tell us what you can teach. We'll find the people who want it.</p>
+                    <button className="btn btn-primary mt-16" onClick={() => setPage && setPage("auth")}>Try Quick Match →</button>
+                  </div>
+                )}
               </div>
             )}
           </div>

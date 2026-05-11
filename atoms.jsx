@@ -5,6 +5,18 @@ const { useState, useEffect, useRef } = React;
 //  Shared atoms
 // ============================================================
 
+// — mobile detection hook (shared across all pages via window)
+function useIsMobile(bp = 768) {
+  const [mob, setMob] = useState(window.innerWidth <= bp);
+  useEffect(() => {
+    const h = () => setMob(window.innerWidth <= bp);
+    window.addEventListener("resize", h);
+    return () => window.removeEventListener("resize", h);
+  }, [bp]);
+  return mob;
+}
+window.useIsMobile = useIsMobile;
+
 // Global imperative toast — callable from any button handler
 window.showToast = function(text, emoji) {
   const existing = document.querySelectorAll(".toast");
@@ -83,28 +95,54 @@ function Placeholder({ label, dark, style, className = "", src }) {
 // ============================================================
 
 function Nav({ page, setPage, dark }) {
+  const [menuOpen, setMenuOpen] = useState(false);
   const items = [
-    { id: "home", label: "Home" },
-    { id: "browse", label: "Browse" },
+    { id: "home",      label: "Home" },
+    { id: "browse",    label: "Browse" },
     { id: "workshops", label: "Workshops" },
-    { id: "pricing", label: "Pricing" },
+    { id: "pricing",   label: "Pricing" },
   ];
+  const go = (id) => { setPage(id); setMenuOpen(false); };
+
   return (
     <header className={"nav-shell" + (dark ? " dark" : "")}>
       <div className="nav-inner">
-        <a onClick={() => setPage("home")} style={{cursor:"pointer"}}><Brand /></a>
-        <nav className="nav-links">
+        <a onClick={() => go("home")} style={{cursor:"pointer", flexShrink:0}}><Brand /></a>
+
+        {/* Desktop links */}
+        <nav className={"nav-links" + (menuOpen ? " mob-open" : "")}>
           {items.map(i => (
-            <a key={i.id} className={page === i.id ? "active" : ""} onClick={() => setPage(i.id)}>{i.label}</a>
+            <a key={i.id} className={page === i.id ? "active" : ""} onClick={() => go(i.id)}>{i.label}</a>
           ))}
+          {/* Mobile-only auth row inside menu */}
+          <div style={{borderTop:"1px solid var(--line)", marginTop:12, paddingTop:16, display:"flex", gap:10}}>
+            <button className="btn btn-ghost" style={{flex:1, justifyContent:"center"}} onClick={() => go("dashboard")}>Dashboard</button>
+            <button className="btn btn-primary" style={{flex:1, justifyContent:"center"}} onClick={() => go("auth")}>Sign in</button>
+          </div>
         </nav>
-        <div className="row gap-12 center">
-          <a onClick={() => setPage("dashboard")} className="row gap-8 center" style={{cursor:"pointer", fontSize:14, fontWeight:500}}>
+
+        {/* Desktop user row */}
+        <div className="row gap-12 center nav-user-row">
+          <a onClick={() => go("dashboard")} className="row gap-8 center" style={{cursor:"pointer", fontSize:14, fontWeight:500}}>
             <Avatar initials="YO" size="sm" color="orange" />
             <span style={{opacity:.8}}>Dashboard</span>
           </a>
-          <button className="btn btn-sm btn-primary" onClick={() => setPage("auth")}>Sign in</button>
+          <button className="btn btn-sm btn-primary" onClick={() => go("auth")}>Sign in</button>
         </div>
+
+        {/* Hamburger — hidden on desktop via CSS */}
+        <button
+          className="nav-mob-btn"
+          onClick={() => setMenuOpen(o => !o)}
+          aria-label="Toggle menu"
+          style={{
+            display:"none", background:"none",
+            border:"1px solid var(--line)", borderRadius:10,
+            width:40, height:40, alignItems:"center", justifyContent:"center",
+            cursor:"pointer", fontSize:18, flexShrink:0,
+            color: dark ? "#fff" : "var(--ink)"
+          }}
+        >{menuOpen ? "✕" : "☰"}</button>
       </div>
     </header>
   );
@@ -114,8 +152,8 @@ function Footer({ setPage }) {
   return (
     <footer className="foot surface-dark">
       <div className="wrap">
-        <div style={{display:"grid", gridTemplateColumns:"1.4fr 1fr 1fr 1fr", gap:48}}>
-          <div>
+        <div className="foot-cols" style={{display:"grid", gridTemplateColumns:"1.4fr 1fr 1fr 1fr", gap:48}}>
+          <div className="foot-brand">
             <Brand />
             <p className="muted" style={{maxWidth: 320, marginTop: 16, fontSize: 14, lineHeight: 1.6}}>
               A peer-to-peer platform for trading what you know. Teach a little, learn a lot.
@@ -244,4 +282,4 @@ function ReviewCard({ r }) {
   );
 }
 
-window.SwappiAtoms = { Brand, Avatar, Rating, Reveal, Placeholder, Nav, Footer, SkillCard, ProviderCard, ReviewCard };
+window.SwappiAtoms = { Brand, Avatar, Rating, Reveal, Placeholder, Nav, Footer, SkillCard, ProviderCard, ReviewCard, useIsMobile };

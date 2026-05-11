@@ -466,3 +466,74 @@ button { font-family: inherit; cursor: pointer; }
 ::-webkit-scrollbar { width: 10px; height: 10px; }
 ::-webkit-scrollbar-thumb { background: color-mix(in oklch, var(--ink) 18%, transparent); border-radius: 999px; }
 ::-webkit-scrollbar-thumb:hover { background: color-mix(in oklch, var(--ink) 32%, transparent); }
+
+/* ============================================================
+   RESPONSIVE GRID HELPERS  (desktop defaults, overridden below)
+   ============================================================ */
+.grid-2     { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+.grid-3     { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.grid-4     { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.grid-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; }
+.grid-trust { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; }
+
+/* ============================================================
+   MOBILE  (≤ 768 px)
+   ============================================================ */
+@media (max-width: 768px) {
+  /* — layout */
+  .wrap    { padding: 0 16px; }
+  .section { padding: 48px 0; }
+
+  /* — nav */
+  .nav-inner { padding: 12px 16px; gap: 10px; }
+  .nav-links  { display: none; }
+  .nav-links.mob-open {
+    display: flex; flex-direction: column; gap: 4px;
+    position: fixed; inset: 0; top: 61px;
+    background: var(--paper); border-top: 1px solid var(--line);
+    z-index: 200; padding: 16px 16px 40px; overflow-y: auto;
+  }
+  .nav-links.mob-open a {
+    padding: 14px 18px; font-size: 17px;
+    border-radius: var(--r-md); display: block;
+  }
+  .nav-mob-btn  { display: flex !important; }
+  .nav-user-row { display: none !important; }
+
+  /* — grids → stack */
+  .grid-2     { grid-template-columns: 1fr; }
+  .grid-3     { grid-template-columns: 1fr; }
+  .grid-4     { grid-template-columns: repeat(2, 1fr); }
+  .grid-steps { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  .grid-trust { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+
+  /* — footer */
+  .foot      { padding: 40px 0 24px; }
+  .foot-cols { grid-template-columns: 1fr 1fr !important; gap: 32px !important; }
+  .foot-brand { grid-column: 1 / -1; }
+
+  /* — modal → bottom sheet */
+  .modal-veil { padding: 0 !important; align-items: flex-end !important; }
+  .modal {
+    border-radius: var(--r-xl) var(--r-xl) 0 0 !important;
+    max-width: 100% !important;
+    max-height: 94vh;
+  }
+
+  /* — toast */
+  .toast { left: 12px; right: 12px; bottom: 12px; }
+
+  /* — utility classes for JSX */
+  .mob-hide   { display: none !important; }
+  .mob-block  { display: block !important; }
+  .mob-col    { flex-direction: column !important; align-items: flex-start !important; }
+  .mob-wrap   { flex-wrap: wrap !important; }
+  .mob-center { text-align: center !important; justify-content: center !important; }
+  .mob-full   { width: 100% !important; max-width: none !important; }
+  .mob-p16    { padding: 16px !important; }
+  .mob-gap8   { gap: 8px !important; }
+}
+
+@media (max-width: 480px) {
+  .grid-4 { grid-template-columns: 1fr; }
+}

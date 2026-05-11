@@ -44,9 +44,9 @@ function HomeHero({ setPage }) {
             </p>
           </Reveal>
           <Reveal delay={240}>
-            <div className="row gap-12 center" style={{justifyContent:"center", marginTop:40}}>
-              <button className="btn btn-lg btn-primary" onClick={() => setPage("browse")}>Find a skill to learn →</button>
-              <button className="btn btn-lg btn-ghost" onClick={() => setPage("auth")}>I want to teach</button>
+            <div className="row mob-col gap-12 center" style={{justifyContent:"center", marginTop:40}}>
+              <button className="btn btn-lg btn-primary mob-full" onClick={() => setPage("browse")}>Find a skill to learn →</button>
+              <button className="btn btn-lg btn-ghost mob-full" onClick={() => setPage("auth")}>I want to teach</button>
             </div>
           </Reveal>
         </div>
@@ -58,9 +58,9 @@ function HomeHero({ setPage }) {
               alt="People learning together"
               style={{width:"100%", aspectRatio:"21/9", objectFit:"cover", objectPosition:"center 30%", borderRadius:24, display:"block"}}
             />
-            <FloatingStat style={{top:24, left:24}} top="12,400+" label="curious members" />
-            <FloatingStat style={{top:60, right:32}} top="8,210" label="successful swaps" />
-            <FloatingStat style={{bottom:32, left:"38%"}} top="4.8 ★" label="across 6,400 reviews" />
+            <FloatingStat style={{top:24, left:24}} top="12,400+" label="curious members" className="mob-hide"/>
+            <FloatingStat style={{top:60, right:32}} top="8,210" label="successful swaps" className="mob-hide"/>
+            <FloatingStat style={{bottom:32, left:"38%"}} top="4.8 ★" label="across 6,400 reviews" className="mob-hide"/>
           </div>
         </Reveal>
       </div>
@@ -68,9 +68,9 @@ function HomeHero({ setPage }) {
   );
 }
 
-function FloatingStat({ top, label, style }) {
+function FloatingStat({ top, label, style, className = "" }) {
   return (
-    <div style={{
+    <div className={className} style={{
       position:"absolute", ...style,
       background:"rgba(255,255,255,0.06)",
       backdropFilter:"blur(16px) saturate(1.4)",
@@ -130,7 +130,7 @@ function HowItWorks() {
           boxShadow:"var(--shadow-3)",
           border:"1px solid var(--line)",
         }}>
-          <div style={{display:"grid", gridTemplateColumns:"repeat(4, 1fr)", gap:32}}>
+          <div className="grid-steps">
             {SWAPPI.steps.map((s, i) => (
               <Reveal key={s.n} delay={i*80}>
                 <div style={{position:"relative"}}>
@@ -161,9 +161,9 @@ function FeaturedSkills({ onBook, setPage }) {
             <Reveal><span className="eyebrow">Featured this week</span></Reveal>
             <Reveal delay={80}><h2 className="display" style={{fontSize:"clamp(40px, 5vw, 64px)", margin:"12px 0 0"}}>Skills people are loving right now.</h2></Reveal>
           </div>
-          <button className="btn btn-ghost" onClick={() => setPage("browse")}>Browse all 1,800+ →</button>
+          <button className="btn btn-ghost mob-full mob-center" onClick={() => setPage("browse")}>Browse all 1,800+ →</button>
         </div>
-        <div style={{display:"grid", gridTemplateColumns:"repeat(3, 1fr)", gap:24}}>
+        <div className="grid-3">
           {featured.map((s, i) => (
             <Reveal key={s.id} delay={i*60}><SkillCard s={s} onBook={onBook} /></Reveal>
           ))}
@@ -183,7 +183,7 @@ function FeaturedProviders() {
             <Reveal delay={80}><h2 className="display" style={{fontSize:"clamp(40px, 5vw, 64px)", margin:"12px 0 0"}}>Teachers worth showing up for.</h2></Reveal>
           </div>
         </div>
-        <div style={{display:"grid", gridTemplateColumns:"repeat(4, 1fr)", gap:20}}>
+        <div className="grid-4">
           {SWAPPI.providers.map((p, i) => (
             <Reveal key={p.name} delay={i*60}><ProviderCard p={p} /></Reveal>
           ))}
@@ -201,7 +201,7 @@ function TrustSection() {
           <Reveal><span className="eyebrow" style={{color:"var(--orange-soft)"}}>Built on trust</span></Reveal>
           <Reveal delay={80}><h2 className="display" style={{fontSize:"clamp(40px, 6vw, 76px)", color:"#fff", margin:"16px 0 0"}}>Real people, verified, reviewed, and held accountable.</h2></Reveal>
         </div>
-        <div style={{display:"grid", gridTemplateColumns:"repeat(4, 1fr)", gap:32, marginTop:64}}>
+        <div className="grid-trust" style={{marginTop:64}}>
           {SWAPPI.trustPillars.map((p, i) => (
             <Reveal key={i} delay={i*70}>
               <div>
