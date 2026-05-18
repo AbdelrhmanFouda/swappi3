@@ -481,7 +481,7 @@ button { font-family: inherit; cursor: pointer; }
    ============================================================ */
 @media (max-width: 768px) {
   /* — layout */
-  .wrap    { padding: 0 16px; }
+  .wrap    { padding: 0 12px; }
   .section { padding: 48px 0; }
 
   /* — nav */
@@ -490,12 +490,43 @@ button { font-family: inherit; cursor: pointer; }
   .nav-mob-btn  { display: flex !important; }
   .nav-user-row { display: none !important; }
 
-  /* — grids → stack */
-  .grid-2     { grid-template-columns: 1fr; }
-  .grid-3     { grid-template-columns: 1fr; }
-  .grid-4     { grid-template-columns: repeat(2, 1fr); }
-  .grid-steps { grid-template-columns: repeat(2, 1fr); gap: 24px; }
-  .grid-trust { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  /* — grids — all 2-per-row on mobile */
+  .grid-2     { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .grid-3     { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .grid-4     { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .grid-steps { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .grid-trust { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+
+  /* — grid override utilities */
+  .grid-mob-1 { grid-template-columns: 1fr !important; }
+  .grid-mob-3 { grid-template-columns: repeat(3, 1fr) !important; gap: 8px !important; }
+
+  /* — metric widget: compact for 2-per-row */
+  .metric-card  { padding: 12px !important; }
+  .metric-val   { font-size: 24px !important; margin-top: 4px !important; }
+  .metric-orb   { width: 50px !important; height: 50px !important; }
+
+  /* — skill card: compact for 2-per-row */
+  .sc-body        { padding: 10px !important; }
+  .sc-title       { font-size: 14px !important; margin-bottom: 8px !important; line-height: 1.25 !important; }
+  .sc-meta        { display: none !important; }
+  .sc-swap-pill   { display: none !important; }
+  .sc-per-session { display: none !important; }
+  .sc-price       { font-size: 15px !important; }
+  .sc-price-from  { display: none !important; }
+
+  /* — workshop card: compact for 2-per-row */
+  .wc-body        { padding: 12px !important; }
+  .wc-title       { font-size: 16px !important; margin: 10px 0 4px !important; line-height: 1.2 !important; }
+  .wc-host        { display: none !important; }
+  .wc-bottom      { padding-top: 12px !important; margin-top: 12px !important; }
+  .wc-seat-dots   { display: none !important; }
+  .wc-btns        { margin-top: 8px !important; gap: 6px !important; }
+  .wc-btn-detail  { display: none !important; }
+  .wc-btn-reserve { flex: 1 !important; justify-content: center !important; }
+
+  /* — disable card hover lift (touch devices) */
+  .card:hover { transform: none; box-shadow: var(--shadow-1); }
 
   /* — footer */
   .foot      { padding: 40px 0 24px; }
@@ -510,8 +541,8 @@ button { font-family: inherit; cursor: pointer; }
     max-height: 94vh;
   }
 
-  /* — toast */
-  .toast { left: 12px; right: 12px; bottom: 12px; }
+  /* — toast sits above mobile bottom tab bar */
+  .toast { left: 12px; right: 12px; bottom: 80px; }
 
   /* — utility classes for JSX */
   .mob-hide   { display: none !important; }
@@ -522,8 +553,4 @@ button { font-family: inherit; cursor: pointer; }
   .mob-full   { width: 100% !important; max-width: none !important; }
   .mob-p16    { padding: 16px !important; }
   .mob-gap8   { gap: 8px !important; }
-}
-
-@media (max-width: 480px) {
-  .grid-4 { grid-template-columns: 1fr; }
 }

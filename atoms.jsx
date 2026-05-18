@@ -242,14 +242,14 @@ function SkillCard({ s, onBook }) {
     <article className="card" style={{padding: 0, overflow:"hidden", position:"relative"}}>
       <div style={{position:"relative"}}>
         <Placeholder label={s.cat.toUpperCase() + " · LESSON IMAGERY"} src={s.img} style={{aspectRatio:"4/3", borderRadius:0, borderWidth:0, borderBottom:"1px solid var(--line)"}}/>
-        <div style={{position:"absolute", top:12, left:12, display:"flex", gap:6}}>
-          <span className={"pill pill-" + s.catColor}>{s.cat}</span>
-          {s.swap && <span className="pill" style={{background:"rgba(255,255,255,0.85)", backdropFilter:"blur(8px)"}}>↔ Swap-friendly</span>}
+        <div style={{position:"absolute", top:10, left:10, display:"flex", gap:5}}>
+          <span className={"pill pill-" + s.catColor} style={{height:24, fontSize:11}}>{s.cat}</span>
+          {s.swap && <span className="pill sc-swap-pill" style={{background:"rgba(255,255,255,0.85)", backdropFilter:"blur(8px)", height:24, fontSize:11}}>↔ Swap</span>}
         </div>
       </div>
-      <div style={{padding: 18}}>
-        <h3 style={{fontFamily:"var(--f-serif)", fontWeight:400, fontSize:22, lineHeight:1.15, margin:"0 0 14px", letterSpacing:"-0.01em"}}>{s.title}</h3>
-        <div className="row between center" style={{marginTop:8}}>
+      <div className="sc-body" style={{padding: 18}}>
+        <h3 className="sc-title" style={{fontFamily:"var(--f-serif)", fontWeight:400, fontSize:22, lineHeight:1.15, margin:"0 0 14px", letterSpacing:"-0.01em"}}>{s.title}</h3>
+        <div className="row between center sc-meta" style={{marginTop:8}}>
           <div className="row gap-8 center">
             <Avatar initials={s.initials} size="sm" />
             <div className="col">
@@ -262,10 +262,10 @@ function SkillCard({ s, onBook }) {
             <span style={{fontSize:11, color:"var(--ink-3)"}}>{s.reviews} reviews</span>
           </div>
         </div>
-        <div className="row between center" style={{marginTop:18, paddingTop:14, borderTop:"1px solid var(--line-soft)"}}>
+        <div className="row between center" style={{marginTop:14, paddingTop:12, borderTop:"1px solid var(--line-soft)"}}>
           <div>
-            <span style={{fontSize:11, color:"var(--ink-3)", textTransform:"uppercase", letterSpacing:".1em"}}>From</span>
-            <div style={{fontSize:18, fontWeight:600}}>${s.price}<span style={{fontSize:13, color:"var(--ink-3)", fontWeight:400}}> / session</span></div>
+            <span className="sc-price-from" style={{fontSize:11, color:"var(--ink-3)", textTransform:"uppercase", letterSpacing:".1em"}}>From</span>
+            <div className="sc-price" style={{fontSize:18, fontWeight:600}}>${s.price}<span className="sc-per-session" style={{fontSize:13, color:"var(--ink-3)", fontWeight:400}}> / session</span></div>
           </div>
           <button className="btn btn-sm btn-primary" onClick={() => onBook && onBook(s)}>Book →</button>
         </div>

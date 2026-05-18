@@ -441,13 +441,13 @@ function EarningsSection({ isMobile }) {
         <button className="btn btn-sm btn-ghost" onClick={() => window.showToast("Downloading earnings report…","📄")}>CSV</button>
       </div>
 
-      <div className="grid-3" style={{gap:12, marginBottom:20}}>
+      <div className="grid-3 grid-mob-3" style={{gap:12, marginBottom:20}}>
         {[
           {label:"This month",    val:"$540",  delta:"+$120 vs last"},
           {label:"All time",      val:"$4,820",delta:"since Jan '24"},
           {label:"Avg / session", val:"$86",   delta:"56 sessions"},
         ].map((c,i) => (
-          <div key={i} className="card" style={{padding: isMobile ? 14 : 24}}>
+          <div key={i} className="card" style={{padding: isMobile ? 12 : 24}}>
             <div style={{fontSize:10, color:"var(--ink-3)", textTransform:"uppercase", letterSpacing:".1em", fontWeight:700}}>{c.label}</div>
             <div className="display" style={{fontSize: isMobile ? 28 : 40, marginTop:6}}>{c.val}</div>
             <div style={{fontSize:11, color:"var(--ink-3)", marginTop:4}}>{c.delta}</div>
@@ -487,26 +487,26 @@ function SkillsSection({ onBook, setPage, isMobile }) {
         <button className="btn btn-sm btn-primary" onClick={() => window.showToast("Opening skill editor…","✎")}>+ Add</button>
       </div>
 
-      <div className="grid-2" style={{gap:16}}>
+      <div className="grid-2 grid-mob-2" style={{gap:12}}>
         {mySkills.map((s, i) => {
           const off = paused.includes(s.id);
           return (
             <div key={s.id} className="card" style={{padding:0, overflow:"hidden", opacity: off ? .6 : 1}}>
-              {s.img && <img src={s.img} alt={s.title} style={{width:"100%", height:140, objectFit:"cover"}}/>}
-              <div style={{padding:16}}>
-                <div className="row between center" style={{marginBottom:10}}>
-                  <span className={"pill pill-" + s.catColor}>{s.cat}</span>
-                  <span className={"pill " + (off ? "" : "pill-blue")}>{off ? "Paused" : "Active"}</span>
+              {s.img && <img src={s.img} alt={s.title} style={{width:"100%", height: isMobile ? 100 : 140, objectFit:"cover"}}/>}
+              <div style={{padding: isMobile ? 10 : 16}}>
+                <div className="row between center" style={{marginBottom:8}}>
+                  <span className={"pill pill-" + s.catColor} style={{height:22, fontSize:10}}>{s.cat}</span>
+                  <span className={"pill " + (off ? "" : "pill-blue")} style={{height:22, fontSize:10}}>{off ? "Paused" : "Active"}</span>
                 </div>
-                <h3 style={{fontWeight:700, fontSize:15, margin:"0 0 6px"}}>{s.title}</h3>
-                <div style={{fontSize:12, color:"var(--ink-3)"}}>{s.reviews} reviews · ${s.price}/session</div>
-                <div className="row gap-6 mt-16" style={{flexWrap:"wrap"}}>
-                  <button className="btn btn-sm btn-primary" onClick={() => window.showToast(`Editing "${s.title}"…`, "✎")}>Edit</button>
-                  <button className="btn btn-sm btn-ghost" onClick={() => setPaused(p => p.includes(s.id) ? p.filter(x=>x!==s.id) : [...p,s.id])}>
+                <h3 style={{fontWeight:700, fontSize: isMobile ? 13 : 15, margin:"0 0 4px"}}>{s.title}</h3>
+                <div style={{fontSize:11, color:"var(--ink-3)"}}>{s.reviews} reviews · ${s.price}/session</div>
+                <div className="row gap-4 mt-12" style={{flexWrap:"wrap"}}>
+                  <button className="btn btn-sm btn-primary" style={{height:30, fontSize:11, padding:"0 10px"}} onClick={() => window.showToast(`Editing "${s.title}"…`, "✎")}>Edit</button>
+                  <button className="btn btn-sm btn-ghost" style={{height:30, fontSize:11, padding:"0 10px"}} onClick={() => setPaused(p => p.includes(s.id) ? p.filter(x=>x!==s.id) : [...p,s.id])}>
                     {off ? "Unpause" : "Pause"}
                   </button>
-                  <button className="btn btn-sm btn-ghost" style={{color:"var(--danger)", borderColor:"var(--danger)"}}
-                    onClick={() => window.showToast(`Removed "${s.title}"`, "🗑")}>Delete</button>
+                  {!isMobile && <button className="btn btn-sm btn-ghost" style={{color:"var(--danger)", borderColor:"var(--danger)"}}
+                    onClick={() => window.showToast(`Removed "${s.title}"`, "🗑")}>Delete</button>}
                 </div>
               </div>
             </div>
@@ -561,9 +561,9 @@ function SettingsSection({ isMobile }) {
           </div>
         </div>
 
-        <div className="grid-2" style={{gap:16}}>
+        <div className="grid-2 grid-mob-2" style={{gap:12}}>
           {/* Account */}
-          <div className="card" style={{padding:24}}>
+          <div className="card" style={{padding:16}}>
             <h2 style={{margin:"0 0 18px", fontSize:16, fontWeight:700}}>Account</h2>
             <div className="field">
               <label>Email</label>
@@ -577,13 +577,13 @@ function SettingsSection({ isMobile }) {
           </div>
 
           {/* Notifications */}
-          <div className="card" style={{padding:24}}>
+          <div className="card" style={{padding:16}}>
             <h2 style={{margin:"0 0 18px", fontSize:16, fontWeight:700}}>Notifications</h2>
             <div className="col gap-14">
               {[
-                ["notify_sessions","Session reminders"],
-                ["notify_messages","New messages"],
-                ["notify_reviews","Review requests"],
+                ["notify_sessions","Sessions"],
+                ["notify_messages","Messages"],
+                ["notify_reviews","Reviews"],
               ].map(([key, label]) => (
                 <div key={key} className="row between center">
                   <span style={{fontSize:14}}>{label}</span>
@@ -657,10 +657,10 @@ function EarningsChart({ mini }) {
 
 function MetricCard({ label, val, delta, color, onClick }) {
   return (
-    <div className="card" style={{padding:16, position:"relative", overflow:"hidden", cursor:onClick?"pointer":"default"}} onClick={onClick}>
-      <div style={{position:"absolute", top:0, right:0, width:70, height:70, borderRadius:"50%", background:color==="orange"?"var(--orange-soft)":"var(--blue-soft)", opacity:.5, transform:"translate(30%,-30%)"}}/>
+    <div className="card metric-card" style={{padding:16, position:"relative", overflow:"hidden", cursor:onClick?"pointer":"default"}} onClick={onClick}>
+      <div className="metric-orb" style={{position:"absolute", top:0, right:0, width:70, height:70, borderRadius:"50%", background:color==="orange"?"var(--orange-soft)":"var(--blue-soft)", opacity:.5, transform:"translate(30%,-30%)"}}/>
       <div style={{fontSize:10, color:"var(--ink-3)", textTransform:"uppercase", letterSpacing:".1em", fontWeight:700}}>{label}</div>
-      <div className="display" style={{fontSize:32, marginTop:6}}>{val}</div>
+      <div className="display metric-val" style={{fontSize:32, marginTop:6}}>{val}</div>
       <div style={{fontSize:11, color:"var(--ink-3)", marginTop:3}}>{delta}</div>
     </div>
   );

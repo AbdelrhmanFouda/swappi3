@@ -97,31 +97,31 @@ function WorkshopsPage({ onBook, setPage }) {
                   ? <img src={w.img} alt={w.title} style={{width:"100%", aspectRatio:"5/3", objectFit:"cover", display:"block", borderBottom:"1px solid var(--line)"}} loading="lazy" />
                   : <Placeholder label={w.title.toUpperCase()+" · IMAGERY"} style={{aspectRatio:"5/3", borderRadius:0, borderWidth:0, borderBottom:"1px solid var(--line)"}}/>
                 }
-                <div style={{padding:24}}>
-                  <div className="row gap-8">
-                    <span className="pill pill-blue">{w.location.toLowerCase().includes("online") ? "Online" : "In-person"}</span>
-                    <span className="pill">{w.seats - w.taken} seats left</span>
+                <div className="wc-body" style={{padding:20}}>
+                  <div className="row gap-6">
+                    <span className="pill pill-blue" style={{height:24, fontSize:11}}>{w.location.toLowerCase().includes("online") ? "Online" : "In-person"}</span>
+                    <span className="pill" style={{height:24, fontSize:11}}>{w.seats - w.taken} left</span>
                   </div>
-                  <h3 style={{fontFamily:"var(--f-serif)", fontWeight:400, fontSize:24, lineHeight:1.15, margin:"16px 0 8px"}}>{w.title}</h3>
-                  <p style={{fontSize:13, color:"var(--ink-3)", margin:0}}>Hosted by {w.host} · {w.location}</p>
+                  <h3 className="wc-title" style={{fontFamily:"var(--f-serif)", fontWeight:400, fontSize:22, lineHeight:1.15, margin:"14px 0 6px"}}>{w.title}</h3>
+                  <p className="wc-host" style={{fontSize:13, color:"var(--ink-3)", margin:0}}>Hosted by {w.host} · {w.location}</p>
 
-                  <div className="row between center mt-24" style={{paddingTop:18, borderTop:"1px solid var(--line-soft)"}}>
+                  <div className="row between center wc-bottom mt-24" style={{paddingTop:16, borderTop:"1px solid var(--line-soft)"}}>
                     <div>
                       <div style={{fontSize:13, fontWeight:600}}>{w.date}</div>
                       <div style={{fontSize:11, color:"var(--ink-3)"}}>{w.time}</div>
                     </div>
                     <div className="col" style={{alignItems:"flex-end"}}>
-                      <div style={{fontSize:18, fontWeight:700}}>${w.price}</div>
-                      <div style={{display:"flex", gap:2, marginTop:4}}>
+                      <div style={{fontSize:16, fontWeight:700}}>${w.price}</div>
+                      <div className="wc-seat-dots" style={{display:"flex", gap:2, marginTop:4}}>
                         {Array.from({length:w.seats}).map((_,j) => (
                           <span key={j} style={{width:6, height:6, borderRadius:1, background: j<w.taken ? "var(--orange)" : "var(--cream-3)"}}></span>
                         ))}
                       </div>
                     </div>
                   </div>
-                  <div className="row gap-8 mt-16">
-                    <button className="btn btn-sm btn-ghost" style={{flex:1, justifyContent:"center"}} onClick={() => setDetail(w)}>Details</button>
-                    <button className="btn btn-sm btn-primary" style={{flex:1, justifyContent:"center"}}
+                  <div className="row wc-btns gap-8 mt-16">
+                    <button className="btn btn-sm btn-ghost wc-btn-detail" style={{flex:1, justifyContent:"center"}} onClick={() => setDetail(w)}>Details</button>
+                    <button className="btn btn-sm btn-primary wc-btn-reserve" style={{flex:1, justifyContent:"center"}}
                       onClick={() => onBook && onBook({title:w.title, provider:w.host, initials:w.host.split(" ").map(n=>n[0]).join(""), price:w.price, mode:w.location, cat:"Workshop", catColor:"orange", rating:4.8})}>
                       Reserve
                     </button>

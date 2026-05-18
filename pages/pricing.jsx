@@ -87,10 +87,10 @@ function PricingPage({ setPage }) {
       </section>
 
       <section className="wrap" style={{marginTop:48}}>
-        <div className="grid-3" style={{alignItems:"start"}}>
+        <div className="grid-3 grid-mob-1" style={{alignItems:"start", gap:20}}>
           {tiers.map(t => (
             <div key={t.name} className="card" style={{
-              padding:32,
+              padding: "clamp(20px,4vw,32px)",
               position:"relative",
               border: t.popular ? "2px solid var(--orange)" : "1px solid var(--line)",
               boxShadow: t.popular ? "0 0 0 6px color-mix(in oklch, var(--orange) 14%, transparent), var(--shadow-2)" : "var(--shadow-1)",
