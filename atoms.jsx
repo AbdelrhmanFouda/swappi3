@@ -112,6 +112,7 @@ function Nav({ page, setPage, dark }) {
     { id: "pricing",   label: "Pricing" },
   ];
   const go = (id) => { setPage(id); setMenuOpen(false); };
+  const cu = window.SWAPPI?.currentUser; // null = not logged in
 
   return (
     <>
@@ -119,23 +120,28 @@ function Nav({ page, setPage, dark }) {
         <div className="nav-inner">
           <a onClick={() => go("home")} style={{cursor:"pointer", flexShrink:0}}><Brand /></a>
 
-          {/* Desktop nav links — hidden on mobile via CSS */}
+          {/* Desktop nav links */}
           <nav className="nav-links">
             {items.map(i => (
               <a key={i.id} className={page === i.id ? "active" : ""} onClick={() => go(i.id)}>{i.label}</a>
             ))}
           </nav>
 
-          {/* Desktop user row — hidden on mobile via CSS */}
+          {/* Desktop user row */}
           <div className="row gap-12 center nav-user-row">
-            <a onClick={() => go("dashboard")} className="row gap-8 center" style={{cursor:"pointer", fontSize:14, fontWeight:500}}>
-              <Avatar initials="YO" size="sm" color="orange" />
-              <span style={{opacity:.8}}>Dashboard</span>
-            </a>
-            <button className="btn btn-sm btn-primary" onClick={() => go("auth")}>Sign in</button>
+            {cu ? (
+              /* Logged in — show avatar + name + dashboard link */
+              <a onClick={() => go("dashboard")} className="row gap-8 center" style={{cursor:"pointer", fontSize:14, fontWeight:500}}>
+                <Avatar initials={cu.initials} size="sm" color={cu.color || "blue"} verified={cu.verified} />
+                <span style={{opacity:.8}}>{cu.name.split(" ")[0]}</span>
+              </a>
+            ) : (
+              /* Logged out — show Sign in only */
+              <button className="btn btn-sm btn-primary" onClick={() => go("auth")}>Sign in</button>
+            )}
           </div>
 
-          {/* Hamburger — shown only on mobile via CSS */}
+          {/* Hamburger */}
           <button
             className="nav-mob-btn"
             onClick={() => setMenuOpen(o => !o)}
@@ -151,7 +157,7 @@ function Nav({ page, setPage, dark }) {
         </div>
       </header>
 
-      {/* Mobile menu overlay — rendered OUTSIDE header so backdrop-filter doesn't trap it */}
+      {/* Mobile menu overlay */}
       {menuOpen && (
         <div style={{
           position:"fixed", inset:0, zIndex:500,
@@ -160,13 +166,11 @@ function Nav({ page, setPage, dark }) {
           overflowY:"auto",
           paddingTop:61,
         }}>
-          {/* Close bar */}
           <div style={{display:"flex", justifyContent:"space-between", alignItems:"center", padding:"16px 20px", borderBottom:"1px solid var(--line)"}}>
             <Brand />
             <button onClick={() => setMenuOpen(false)} style={{background:"none", border:"1px solid var(--line)", borderRadius:10, width:40, height:40, display:"flex", alignItems:"center", justifyContent:"center", fontSize:20, cursor:"pointer", color:"var(--ink)"}}>✕</button>
           </div>
 
-          {/* Nav links */}
           <div style={{padding:"12px 16px", flex:1}}>
             {items.map(i => (
               <a key={i.id} onClick={() => go(i.id)} style={{
@@ -180,10 +184,26 @@ function Nav({ page, setPage, dark }) {
             ))}
           </div>
 
-          {/* Auth buttons at the bottom */}
-          <div style={{padding:"20px 16px", borderTop:"1px solid var(--line)", display:"flex", gap:10}}>
-            <button className="btn btn-ghost" style={{flex:1, justifyContent:"center"}} onClick={() => go("dashboard")}>Dashboard</button>
-            <button className="btn btn-primary" style={{flex:1, justifyContent:"center"}} onClick={() => go("auth")}>Sign in</button>
+          {/* Auth / user section at bottom of mobile menu */}
+          <div style={{padding:"20px 16px", borderTop:"1px solid var(--line)"}}>
+            {cu ? (
+              <div className="row gap-12 center" style={{marginBottom:12}}>
+                <Avatar initials={cu.initials} size="md" color={cu.color || "blue"} verified={cu.verified} />
+                <div style={{flex:1}}>
+                  <div style={{fontWeight:700, fontSize:15}}>{cu.name}</div>
+                  <div style={{fontSize:12, color:"var(--ink-3)"}}>{cu.email}</div>
+                </div>
+              </div>
+            ) : null}
+            <div style={{display:"flex", gap:10}}>
+              {cu
+                ? <button className="btn btn-primary" style={{flex:1, justifyContent:"center"}} onClick={() => go("dashboard")}>My Dashboard →</button>
+                : <>
+                    <button className="btn btn-ghost" style={{flex:1, justifyContent:"center"}} onClick={() => go("auth")}>Sign in</button>
+                    <button className="btn btn-primary" style={{flex:1, justifyContent:"center"}} onClick={() => go("auth")}>Get started</button>
+                  </>
+              }
+            </div>
           </div>
         </div>
       )}
