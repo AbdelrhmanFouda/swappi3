@@ -6,11 +6,7 @@ const { useState } = React;
 // ============================================================
 
 function PricingPage({ setPage }) {
-  const [annual, setAnnual] = useState(true);
-
-  const MONTHLY_EGP = 750;
-  const ANNUAL_EGP  = 499;   // per month, billed 5,988 EGP / year
-  const price = annual ? ANNUAL_EGP : MONTHLY_EGP;
+  const PRICE_EGP = 750;
 
   const premiumFeatures = [
     {
@@ -61,18 +57,9 @@ function PricingPage({ setPage }) {
             Everything you need to swap skills is free — forever. Upgrade when you want to grow faster.
           </p>
 
-          {/* Toggle */}
-          <div className="row gap-12 center" style={{marginTop:36, justifyContent:"center"}}>
-            <span style={{fontSize:14, fontWeight: annual?400:600, color: annual?"var(--ink-3)":"var(--ink)"}}>Monthly</span>
-            <button onClick={()=>setAnnual(a=>!a)} style={{
-              width:56, height:32, borderRadius:99,
-              background: annual ? "var(--orange)" : "var(--cream-3)",
-              border:"none", position:"relative", cursor:"pointer", transition:"background .25s"
-            }}>
-              <span style={{position:"absolute", top:3, left:annual?27:3, width:26, height:26, borderRadius:"50%", background:"#fff", transition:"left .25s cubic-bezier(.2,.7,.2,1)", boxShadow:"var(--shadow-1)"}}></span>
-            </button>
-            <span style={{fontSize:14, fontWeight: annual?600:400, color: annual?"var(--ink)":"var(--ink-3)"}}>Annual</span>
-            <span className="pill pill-blue" style={{marginLeft:4}}>Save 34%</span>
+          {/* Billing note */}
+          <div style={{marginTop:36, display:"flex", justifyContent:"center"}}>
+            <span className="pill pill-blue">Flat rate · cancel any time</span>
           </div>
         </div>
       </section>
@@ -117,13 +104,12 @@ function PricingPage({ setPage }) {
             <h2 style={{fontFamily:"var(--f-serif)", fontWeight:400, fontSize:36, margin:"8px 0 4px"}}>Premium</h2>
 
             <div style={{display:"flex", alignItems:"baseline", gap:6, marginBottom:4}}>
-              <span className="display" style={{fontSize:64, lineHeight:1, transition:"all .3s"}}>{price}</span>
+              <span className="display" style={{fontSize:64, lineHeight:1}}>{PRICE_EGP}</span>
               <div>
                 <div style={{color:"var(--ink-3)", fontSize:15}}>EGP / mo</div>
-                {annual && <div style={{fontSize:11, color:"var(--ink-3)"}}>billed {(price*12).toLocaleString()} EGP / year</div>}
+                <div style={{fontSize:11, color:"var(--ink-3)"}}>billed {(PRICE_EGP*12).toLocaleString()} EGP / year</div>
               </div>
             </div>
-            {!annual && <div style={{fontSize:12, color:"var(--ink-3)", marginBottom:8}}>or {ANNUAL_EGP} EGP/mo billed annually — save {MONTHLY_EGP-ANNUAL_EGP} EGP/mo</div>}
 
             <button className="btn btn-primary mt-16" style={{width:"100%", justifyContent:"center", height:52, fontSize:16}} onClick={()=>setPage("auth")}>
               Start Premium →

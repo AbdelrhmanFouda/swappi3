@@ -56,7 +56,7 @@ function BookingModal({ skill, onClose, onComplete }) {
                 <div style={{fontSize:12, color:"var(--ink-3)", marginTop:2}}>with {skill.provider} · {skill.mode}</div>
               </div>
               <div style={{textAlign:"right"}}>
-                <div style={{fontSize:16, fontWeight:600}}>${skill.price}</div>
+                <div style={{fontSize:16, fontWeight:600}}>{skill.price} EGP</div>
                 <div style={{fontSize:11, color:"var(--ink-3)"}}>per session</div>
               </div>
             </div>
@@ -97,9 +97,9 @@ function BookingModal({ skill, onClose, onComplete }) {
                 <ModeOption
                   selected={mode==="pay"}
                   onClick={()=>setMode("pay")}
-                  title={`Pay $${skill.price}`}
+                  title={`Pay ${skill.price} EGP`}
                   body="Standard session, money up front. Held until 24 hours after."
-                  icon="$"
+                  icon="E£"
                   color="orange"
                 />
                 <ModeOption
@@ -134,7 +134,7 @@ function BookingModal({ skill, onClose, onComplete }) {
                 <Review row="When" val={slot}/>
                 <Review row="With" val={skill.provider}/>
                 <Review row="Format" val={skill.mode}/>
-                <Review row="Payment" val={mode === "pay" ? `$${skill.price} (held by Stripe)` : `Swap — ${offering || "skill TBD"}`}/>
+                <Review row="Payment" val={mode === "pay" ? `${skill.price} EGP (held by Stripe)` : `Swap — ${offering || "skill TBD"}`}/>
                 {note && <Review row="Note" val={`"${note}"`}/>}
               </div>
               <div style={{padding:14, borderRadius:12, background:"var(--blue-soft)", marginTop:20, fontSize:13, color:"var(--ink)", lineHeight:1.5}}>
@@ -159,7 +159,7 @@ function BookingModal({ skill, onClose, onComplete }) {
               <div style={{margin:"28px 0 8px", padding:16, borderRadius:12, background:"var(--cream-2)", textAlign:"left"}}>
                 <div style={{fontSize:11, color:"var(--ink-3)", textTransform:"uppercase", letterSpacing:".1em"}}>Requested</div>
                 <div style={{fontWeight:600, marginTop:4}}>{skill.title}</div>
-                <div style={{fontSize:13, color:"var(--ink-3)", marginTop:2}}>{slot} · {mode==="pay"?`$${skill.price}`:"Skill swap"}</div>
+                <div style={{fontSize:13, color:"var(--ink-3)", marginTop:2}}>{slot} · {mode==="pay"?`${skill.price} EGP`:"Skill swap"}</div>
               </div>
               <div className="row gap-8" style={{marginTop:24, justifyContent:"center"}}>
                 <button className="btn btn-ghost" onClick={onClose}>Keep browsing</button>

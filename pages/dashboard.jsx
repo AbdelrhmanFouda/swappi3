@@ -15,7 +15,7 @@ function DashboardPage({ setPage, onBook }) {
     ["overview", "Overview", "◎"],
     ["sessions", "Sessions", "☷"],
     ["messages", "Messages", "✉"],
-    ["earnings", "Earnings", "$"],
+    ["earnings", "Earnings", "₤"],
     ["skills",   "My Skills","✎"],
     ["settings", "Settings", "⚙"],
   ];
@@ -157,7 +157,7 @@ function OverviewSection({ setPage, setSection, onBook, isMobile }) {
       <div className="grid-4" style={{gap:12, marginBottom:24}}>
         <MetricCard label="Sessions this month" val="6"    delta="+2 vs last"  color="orange" onClick={() => setSection("sessions")}/>
         <MetricCard label="Pending requests"    val="3"    delta="2 to approve" color="blue"   onClick={() => setSection("sessions")}/>
-        <MetricCard label="Earnings"            val="$540" delta="+$120 wk"    color="orange" onClick={() => setSection("earnings")}/>
+        <MetricCard label="Earnings"            val="540 EGP" delta="+120 EGP wk"    color="orange" onClick={() => setSection("earnings")}/>
         <MetricCard label="Profile views"       val="284"  delta="+18% wk"     color="blue" />
       </div>
 
@@ -459,9 +459,9 @@ function EarningsSection({ isMobile }) {
 
       <div className="grid-3 grid-mob-3" style={{gap:12, marginBottom:20}}>
         {[
-          {label:"This month",    val:"$540",  delta:"+$120 vs last"},
-          {label:"All time",      val:"$4,820",delta:"since Jan '24"},
-          {label:"Avg / session", val:"$86",   delta:"56 sessions"},
+          {label:"This month",    val:"540 EGP",  delta:"+120 EGP vs last"},
+          {label:"All time",      val:"4,820 EGP",delta:"since Jan '24"},
+          {label:"Avg / session", val:"86 EGP",   delta:"56 sessions"},
         ].map((c,i) => (
           <div key={i} className="card" style={{padding: isMobile ? 12 : 24}}>
             <div style={{fontSize:10, color:"var(--ink-3)", textTransform:"uppercase", letterSpacing:".1em", fontWeight:700}}>{c.label}</div>
@@ -483,7 +483,7 @@ function EarningsSection({ isMobile }) {
               <div style={{fontSize:14, fontWeight:600}}>{p.date}</div>
               <div style={{fontSize:12, color:"var(--ink-3)"}}>{p.sessions} sessions</div>
             </div>
-            <div style={{fontSize:16, fontWeight:700}}>${p.amount}</div>
+            <div style={{fontSize:16, fontWeight:700}}>{p.amount} EGP</div>
             <span className={"pill " + (p.status==="paid" ? "pill-blue" : "pill-orange")}>{p.status}</span>
           </div>
         ))}
@@ -515,7 +515,7 @@ function SkillsSection({ onBook, setPage, isMobile }) {
                   <span className={"pill " + (off ? "" : "pill-blue")} style={{height:22, fontSize:10}}>{off ? "Paused" : "Active"}</span>
                 </div>
                 <h3 style={{fontWeight:700, fontSize: isMobile ? 13 : 15, margin:"0 0 4px"}}>{s.title}</h3>
-                <div style={{fontSize:11, color:"var(--ink-3)"}}>{s.reviews} reviews · ${s.price}/session</div>
+                <div style={{fontSize:11, color:"var(--ink-3)"}}>{s.reviews} reviews · {s.price} EGP/session</div>
                 <div className="row gap-4 mt-12" style={{flexWrap:"wrap"}}>
                   <button className="btn btn-sm btn-primary" style={{height:30, fontSize:11, padding:"0 10px"}} onClick={() => window.showToast(`Editing "${s.title}"…`, "✎")}>Edit</button>
                   <button className="btn btn-sm btn-ghost" style={{height:30, fontSize:11, padding:"0 10px"}} onClick={() => setPaused(p => p.includes(s.id) ? p.filter(x=>x!==s.id) : [...p,s.id])}>
@@ -648,11 +648,11 @@ function EarningsChart({ mini }) {
     <div className="card" style={{padding:20}}>
       <div className="row between center">
         <h2 style={{margin:0, fontSize:mini?18:22, fontWeight:700}}>Earnings{mini?" · 12 wks":""}</h2>
-        <span className="pill pill-orange">$1,840</span>
+        <span className="pill pill-orange">1,840 EGP</span>
       </div>
       <div style={{display:"flex", alignItems:"flex-end", gap:5, height: mini?130:190, marginTop:20}}>
         {weeks.map((h,i) => (
-          <div key={i} style={{flex:1, cursor:"pointer"}} onClick={() => window.showToast(`Week ${i+1}: $${Math.round(h*19.2)}`, "💰")}>
+          <div key={i} style={{flex:1, cursor:"pointer"}} onClick={() => window.showToast(`Week ${i+1}: ${Math.round(h*19.2)} EGP`, "💰")}>
             <div style={{height:h+"%", background:"linear-gradient(180deg, var(--orange) 0%, var(--orange-deep) 100%)", borderRadius:"5px 5px 0 0", transition:"height .6s", opacity:.85}}
               onMouseEnter={e=>{e.currentTarget.style.opacity="1"}} onMouseLeave={e=>{e.currentTarget.style.opacity=".85"}}/>
           </div>

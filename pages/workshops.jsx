@@ -62,7 +62,7 @@ function WorkshopsPage({ onBook, setPage }) {
                 <Meta label="When" val="Sun · 9am"/>
                 <Meta label="Where" val="Maadi Kitchen Co-op"/>
                 <Meta label="Seats" val="6 of 8 taken"/>
-                <Meta label="Price" val="$40"/>
+                <Meta label="Price" val="40 EGP"/>
               </div>
               <div className="row gap-8 mt-24">
                 <button className="btn btn-primary" onClick={() => onBook && onBook({title:"Intro to Sourdough", provider:"Hana M.", initials:"HM", price:40, mode:"In-person · Maadi", cat:"Cooking", catColor:"orange", rating:4.8})}>Reserve a seat →</button>
@@ -111,7 +111,7 @@ function WorkshopsPage({ onBook, setPage }) {
                       <div style={{fontSize:11, color:"var(--ink-3)"}}>{w.time}</div>
                     </div>
                     <div className="col" style={{alignItems:"flex-end"}}>
-                      <div style={{fontSize:16, fontWeight:700}}>${w.price}</div>
+                      <div style={{fontSize:16, fontWeight:700}}>{w.price} EGP</div>
                       <div className="wc-seat-dots" style={{display:"flex", gap:2, marginTop:4}}>
                         {Array.from({length:w.seats}).map((_,j) => (
                           <span key={j} style={{width:6, height:6, borderRadius:1, background: j<w.taken ? "var(--orange)" : "var(--cream-3)"}}></span>
@@ -141,7 +141,7 @@ function WorkshopsPage({ onBook, setPage }) {
             <span className="eyebrow" style={{color:"var(--orange-soft)"}}>For experienced teachers</span>
             <h2 className="display" style={{fontSize:"clamp(36px,5vw,60px)", color:"#fff", margin:"12px 0 16px"}}>Host your own workshop.</h2>
             <p style={{color:"rgba(255,255,255,0.7)", fontSize:17, lineHeight:1.55, marginBottom:32}}>
-              We handle the booking, payments, reminders, and refunds. You pick the topic, set the price, and show up to teach. Average host earns $340 per Saturday.
+              We handle the booking, payments, reminders, and refunds. You pick the topic, set the price, and show up to teach. Average host earns 340 EGP per Saturday.
             </p>
             <button className="btn btn-primary btn-lg" onClick={() => setPage && setPage("auth")}>Apply to host →</button>
           </div>
@@ -172,7 +172,7 @@ function WorkshopDetailModal({ w, onClose, onBook }) {
             <InfoBox label="Date" val={w.date}/>
             <InfoBox label="Time" val={w.time}/>
             <InfoBox label="Location" val={w.location}/>
-            <InfoBox label="Price" val={`$${w.price} per person`}/>
+            <InfoBox label="Price" val={`${w.price} EGP per person`}/>
           </div>
           <div className="row gap-8">
             <button className="btn btn-ghost" onClick={onClose}>Close</button>

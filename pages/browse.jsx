@@ -70,9 +70,9 @@ function BrowsePage({ onBook, setPage }) {
         </div>
       </FilterGroup>
 
-      <FilterGroup title={`Max price · $${price}`}>
+      <FilterGroup title={`Max price · ${price} EGP`}>
         <input type="range" min={20} max={200} value={price} onChange={(e)=>setPrice(+e.target.value)} style={{width:"100%", accentColor:"oklch(0.62 0.18 42)"}}/>
-        <div className="row between" style={{fontSize:11, color:"var(--ink-3)", marginTop:4}}><span>$20</span><span>$200</span></div>
+        <div className="row between" style={{fontSize:11, color:"var(--ink-3)", marginTop:4}}><span>20 EGP</span><span>200 EGP</span></div>
       </FilterGroup>
 
       <FilterGroup title="Min rating">

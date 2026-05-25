@@ -290,7 +290,7 @@ function SkillCard({ s, onBook }) {
           <div className="row between center" style={{marginTop:14, paddingTop:12, borderTop:"1px solid var(--line-soft)"}}>
             <div>
               <span className="sc-price-from" style={{fontSize:11, color:"var(--ink-3)", textTransform:"uppercase", letterSpacing:".1em"}}>From</span>
-              <div className="sc-price" style={{fontSize:18, fontWeight:600}}>${s.price}<span className="sc-per-session" style={{fontSize:13, color:"var(--ink-3)", fontWeight:400}}> / session</span></div>
+              <div className="sc-price" style={{fontSize:18, fontWeight:600}}>{s.price} EGP<span className="sc-per-session" style={{fontSize:13, color:"var(--ink-3)", fontWeight:400}}> / session</span></div>
             </div>
             <button className="btn btn-sm btn-primary" onClick={() => onBook && onBook(s)}>Book →</button>
           </div>
@@ -359,7 +359,7 @@ function TeacherProfileModal({ s, onClose, onBook }) {
                   <div key={i} className="row between center" style={{padding:"10px 14px", background:"var(--cream-2)", borderRadius:10}}>
                     <div>
                       <div style={{fontSize:13, fontWeight:600}}>{sk.title}</div>
-                      <div style={{fontSize:11, color:"var(--ink-3)"}}>{sk.mode} · ${sk.price}/session</div>
+                      <div style={{fontSize:11, color:"var(--ink-3)"}}>{sk.mode} · {sk.price} EGP/session</div>
                     </div>
                     <button className="btn btn-sm btn-ghost" onClick={() => { onClose(); onBook && onBook(sk); }}>Book</button>
                   </div>
