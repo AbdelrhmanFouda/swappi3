@@ -10,6 +10,7 @@ const useIsMobile = window.useIsMobile || (() => false);
 function DashboardPage({ setPage, onBook }) {
   const [section, setSection] = useState("overview");
   const isMobile = useIsMobile();
+  const user = window.SWAPPI?.currentUser || window.SWAPPI?.defaultNewUser || {};
 
   const navItems = [
     ["overview", "Overview", "◎"],
@@ -28,23 +29,23 @@ function DashboardPage({ setPage, onBook }) {
         {!isMobile && (
           <aside style={{background:"var(--paper)", borderRight:"1px solid var(--line)", padding:"32px 20px", position:"sticky", top:64, alignSelf:"flex-start", height:"calc(100vh - 64px)", overflowY:"auto"}}>
             {(() => {
-              const rank = window.getRank ? window.getRank(14) : {label:"Skilled", icon:"⭐", bg:"var(--orange-soft)", color:"var(--orange-deep)"};
+              const rank = window.getRank ? window.getRank(user.swaps || 0) : {label:"Newcomer", icon:"🌱", bg:"var(--cream-3)", color:"var(--ink-3)"};
               return (
                 <div className="card" style={{padding:16, background:"var(--cream-2)", border:"none"}}>
                   <div className="row gap-12 center">
-                    <Avatar initials="YO" size="md" color="orange" verified />
+                    <Avatar initials={user.initials || "?"} size="md" color={user.color || "blue"} verified={user.verified} />
                     <div>
-                      <div style={{fontSize:14, fontWeight:700}}>You</div>
-                      <div style={{fontSize:11, color:"var(--ink-3)", marginBottom:4}}>Member since '24</div>
+                      <div style={{fontSize:14, fontWeight:700}}>{user.name || "You"}</div>
+                      <div style={{fontSize:11, color:"var(--ink-3)", marginBottom:4}}>Member since {user.memberSince || "'26"}</div>
                       <span style={{background:rank.bg, color:rank.color, borderRadius:99, fontSize:10, fontWeight:700, padding:"2px 8px"}}>
                         {rank.icon} {rank.label}
                       </span>
                     </div>
                   </div>
                   <div className="row gap-16" style={{marginTop:16, paddingTop:14, borderTop:"1px solid var(--line)"}}>
-                    <Mini label="Swaps" val="14" />
-                    <Mini label="Rating" val="4.8★" />
-                    <Mini label="Streak" val="6w" />
+                    <Mini label="Swaps"  val={String(user.swaps || 0)} />
+                    <Mini label="Rating" val={user.rating ? user.rating+"★" : "—"} />
+                    <Mini label="Streak" val={user.streak || "0w"} />
                   </div>
                 </div>
               );
@@ -73,19 +74,19 @@ function DashboardPage({ setPage, onBook }) {
 
         {/* ── Mobile profile strip ── */}
         {isMobile && (() => {
-          const rank = window.getRank ? window.getRank(14) : {label:"Skilled", icon:"⭐", bg:"var(--orange-soft)", color:"var(--orange-deep)"};
+          const rank = window.getRank ? window.getRank(user.swaps || 0) : {label:"Newcomer", icon:"🌱", bg:"var(--cream-3)", color:"var(--ink-3)"};
           return (
             <div style={{background:"var(--paper)", borderBottom:"1px solid var(--line)", padding:"14px 16px"}}>
               <div className="row gap-12 center">
-                <Avatar initials="YO" size="md" color="orange" verified />
+                <Avatar initials={user.initials || "?"} size="md" color={user.color || "blue"} verified={user.verified} />
                 <div style={{flex:1}}>
                   <div className="row gap-8 center">
-                    <span style={{fontSize:15, fontWeight:700}}>You</span>
+                    <span style={{fontSize:15, fontWeight:700}}>{user.name || "You"}</span>
                     <span style={{background:rank.bg, color:rank.color, borderRadius:99, fontSize:11, fontWeight:700, padding:"2px 8px"}}>
                       {rank.icon} {rank.label}
                     </span>
                   </div>
-                  <div style={{fontSize:12, color:"var(--ink-3)", marginTop:2}}>14 swaps · 4.8★ · 6-week streak</div>
+                  <div style={{fontSize:12, color:"var(--ink-3)", marginTop:2}}>{user.swaps||0} swaps · {user.rating ? user.rating+"★" : "—"} · {user.streak||"0w"} streak</div>
                 </div>
                 <button className="btn btn-sm btn-primary" onClick={() => setPage("pricing")}>Go Pro</button>
               </div>
@@ -138,12 +139,15 @@ function DashboardPage({ setPage, onBook }) {
 
 // ── Overview ──────────────────────────────────────────────────
 function OverviewSection({ setPage, setSection, onBook, isMobile }) {
+  const user = window.SWAPPI?.currentUser || window.SWAPPI?.defaultNewUser || {};
+  const m = user.overviewMetrics || {};
+  const firstName = (user.name || "friend").split(" ")[0];
   return (
     <>
       <div className="row mob-col between" style={{marginBottom:24, gap:12}}>
         <div>
           <span className="eyebrow">Good evening</span>
-          <h1 className="display" style={{fontSize: isMobile ? 30 : 48, margin:"8px 0 0"}}>Welcome back, friend.</h1>
+          <h1 className="display" style={{fontSize: isMobile ? 30 : 48, margin:"8px 0 0"}}>Welcome back, {firstName}.</h1>
         </div>
         <div className="row gap-8">
           <button className="btn btn-ghost" style={{fontSize:13}} onClick={() => {
@@ -155,10 +159,10 @@ function OverviewSection({ setPage, setSection, onBook, isMobile }) {
       </div>
 
       <div className="grid-4" style={{gap:12, marginBottom:24}}>
-        <MetricCard label="Sessions this month" val="6"    delta="+2 vs last"  color="orange" onClick={() => setSection("sessions")}/>
-        <MetricCard label="Pending requests"    val="3"    delta="2 to approve" color="blue"   onClick={() => setSection("sessions")}/>
-        <MetricCard label="Earnings"            val="540 EGP" delta="+120 EGP wk"    color="orange" onClick={() => setSection("earnings")}/>
-        <MetricCard label="Profile views"       val="284"  delta="+18% wk"     color="blue" />
+        <MetricCard label="Sessions this month" val={m.sessions||"0"}   delta={m.sessionsDelta||"—"}  color="orange" onClick={() => setSection("sessions")}/>
+        <MetricCard label="Pending requests"    val={m.pending||"0"}    delta={m.pendingDelta||"—"}   color="blue"   onClick={() => setSection("sessions")}/>
+        <MetricCard label="Earnings"            val={m.earnings||"0 EGP"} delta={m.earningsDelta||"—"} color="orange" onClick={() => setSection("earnings")}/>
+        <MetricCard label="Profile views"       val={m.views||"0"}      delta={m.viewsDelta||"—"}     color="blue" />
       </div>
 
       <div style={{display:"grid", gridTemplateColumns: isMobile ? "1fr" : "1.7fr 1fr", gap:20}}>
@@ -167,7 +171,7 @@ function OverviewSection({ setPage, setSection, onBook, isMobile }) {
             <h2 style={{margin:0, fontSize:18, fontWeight:700}}>Upcoming sessions</h2>
             <button className="btn btn-sm btn-ghost" onClick={() => setSection("sessions")}>View all</button>
           </div>
-          {SWAPPI.sessions.slice(0,3).map((s, i) => (
+          {(user.sessions || SWAPPI.sessions).slice(0,3).map((s, i) => (
             <div key={i} className="row gap-12 center" style={{padding:"14px 20px", borderTop:i?"1px solid var(--line-soft)":"none"}}>
               <div style={{width:40, textAlign:"center", flexShrink:0}}>
                 <div style={{fontSize:9, color:"var(--ink-4)", textTransform:"uppercase", letterSpacing:".08em"}}>{s.day}</div>
@@ -186,7 +190,7 @@ function OverviewSection({ setPage, setSection, onBook, isMobile }) {
           <div style={{padding:"18px 20px", borderBottom:"1px solid var(--line)"}}>
             <h2 style={{margin:0, fontSize:18, fontWeight:700}}>Activity</h2>
           </div>
-          {SWAPPI.activity.map((a, i) => (
+          {(user.activity || SWAPPI.activity).map((a, i) => (
             <div key={i} className="row gap-12 center" style={{padding:"14px 20px", borderTop:i?"1px solid var(--line-soft)":"none"}}>
               <Avatar initials={a.initials} size="sm" color={a.color}/>
               <div style={{flex:1, minWidth:0}}>
@@ -204,11 +208,11 @@ function OverviewSection({ setPage, setSection, onBook, isMobile }) {
             <h2 style={{margin:0, fontSize:18, fontWeight:700}}>Messages</h2>
             <span className="pill pill-orange">3 new</span>
           </div>
-          {[
+          {(user.messages && user.messages.length > 0 ? user.messages : [
             ["Yasmin H.","YH","Looking forward to Tuesday — bring the article.","2m","orange"],
             ["Karim S.", "KS","Sounds good, let's swap! Are you free Thursday?","1h","blue"],
             ["Reem A.",  "RA","Here's the prep doc I promised, take your time.","Yesterday","orange"],
-          ].map(([who,init,msg,time,col], i) => (
+          ]).map(([who,init,msg,time,col], i) => (
             <div key={i} className="row gap-12" style={{padding:"14px 20px", borderTop:i?"1px solid var(--line-soft)":"none", cursor:"pointer"}}
               onClick={() => setSection("messages")}>
               <Avatar initials={init} size="md" color={col}/>
@@ -227,13 +231,16 @@ function OverviewSection({ setPage, setSection, onBook, isMobile }) {
 
 // ── Sessions ──────────────────────────────────────────────────
 function SessionsSection({ isMobile }) {
+  const user = window.SWAPPI?.currentUser || window.SWAPPI?.defaultNewUser || {};
   const [tab, setTab] = useState("upcoming");
-  const past = [
+  const fallbackPast = [
     { day:"MON", date:"5",  time:"6:00 PM", title:"Arabic conversation — week 2",     with:"Yasmin H.", initials:"YH", mode:"Online",           status:"completed" },
     { day:"WED", date:"7",  time:"7:30 PM", title:"Watercolor portraits — session 1",  with:"Nour B.",   initials:"NB", mode:"Studio · Zamalek", status:"completed" },
     { day:"FRI", date:"2",  time:"10:00 AM",title:"SQL for analysts — module 3",       with:"Sami R.",   initials:"SR", mode:"Online",           status:"completed" },
   ];
-  const rows = tab==="upcoming" ? SWAPPI.sessions : past;
+  const upcoming = user.sessions || SWAPPI.sessions;
+  const past = user.pastSessions || fallbackPast;
+  const rows = tab==="upcoming" ? upcoming : past;
 
   return (
     <>
@@ -443,12 +450,14 @@ function MessagesSection({ isMobile }) {
 
 // ── Earnings ──────────────────────────────────────────────────
 function EarningsSection({ isMobile }) {
-  const payouts = [
-    { date:"May 1",  amount:420, sessions:3, status:"paid" },
-    { date:"Apr 24", amount:360, sessions:3, status:"paid" },
-    { date:"Apr 17", amount:180, sessions:1, status:"paid" },
-    { date:"Apr 10", amount:480, sessions:4, status:"paid" },
-    { date:"May 10", amount:300, sessions:2, status:"pending" },
+  const user = window.SWAPPI?.currentUser || window.SWAPPI?.defaultNewUser || {};
+  const e = user.earnings || {};
+  const payouts = e.payouts || [
+    { date:"May 1",  amount:"420",  sessions:3, status:"paid" },
+    { date:"Apr 24", amount:"360",  sessions:3, status:"paid" },
+    { date:"Apr 17", amount:"180",  sessions:1, status:"paid" },
+    { date:"Apr 10", amount:"480",  sessions:4, status:"paid" },
+    { date:"May 10", amount:"300",  sessions:2, status:"pending" },
   ];
   return (
     <>
@@ -459,9 +468,9 @@ function EarningsSection({ isMobile }) {
 
       <div className="grid-3 grid-mob-3" style={{gap:12, marginBottom:20}}>
         {[
-          {label:"This month",    val:"540 EGP",  delta:"+120 EGP vs last"},
-          {label:"All time",      val:"4,820 EGP",delta:"since Jan '24"},
-          {label:"Avg / session", val:"86 EGP",   delta:"56 sessions"},
+          {label:"This month",    val:(e.thisMonth||"0")+" EGP",    delta: e.thisMonthDelta||"—"},
+          {label:"All time",      val:(e.allTime||"0")+" EGP",      delta: e.allTimeDelta||"—"},
+          {label:"Avg / session", val:(e.avgSession||"0")+" EGP",   delta: e.sessionCount||"—"},
         ].map((c,i) => (
           <div key={i} className="card" style={{padding: isMobile ? 12 : 24}}>
             <div style={{fontSize:10, color:"var(--ink-3)", textTransform:"uppercase", letterSpacing:".1em", fontWeight:700}}>{c.label}</div>
@@ -494,7 +503,10 @@ function EarningsSection({ isMobile }) {
 
 // ── My Skills ─────────────────────────────────────────────────
 function SkillsSection({ onBook, setPage, isMobile }) {
-  const mySkills = SWAPPI.skills.filter(s => s.provider === "Yasmin H.");
+  const user = window.SWAPPI?.currentUser || window.SWAPPI?.defaultNewUser || {};
+  const mySkills = (user.skills && user.skills.length > 0)
+    ? user.skills
+    : SWAPPI.skills.filter(s => s.provider === "Yasmin H.");
   const [paused, setPaused] = useState([]);
   return (
     <>
@@ -543,9 +555,12 @@ function SkillsSection({ onBook, setPage, isMobile }) {
 
 // ── Settings ──────────────────────────────────────────────────
 function SettingsSection({ isMobile }) {
+  const user = window.SWAPPI?.currentUser || window.SWAPPI?.defaultNewUser || {};
   const [form, setForm] = useState({
-    name:"Yasmin Hafez", bio:"Arabic teacher & translator based in Cairo.",
-    location:"Cairo, Egypt", email:"yasmin@example.com",
+    name: user.name || "",
+    bio: user.bio || "",
+    location: user.location || "",
+    email: user.email || "",
     notify_sessions:true, notify_messages:true, notify_reviews:false, visible:true,
   });
   const upd = k => v => setForm(f => ({...f, [k]:v}));

@@ -28,9 +28,32 @@ function AuthPage({ setPage }) {
 
   const submit = () => {
     if (!valid()) return;
-    if (mode === "login") { setPage("dashboard"); return; }
-    if (step < 3) setStep(step + 1);
-    else setPage("dashboard");
+
+    if (mode === "login") {
+      const email = form.email.trim().toLowerCase();
+      const known = window.SWAPPI?.users?.[email];
+      if (known && form.password === known.password) {
+        window.SWAPPI.currentUser = known;
+      } else {
+        // Unknown credentials → brand-new account
+        const def = window.SWAPPI?.defaultNewUser || {};
+        const rawName = email.split("@")[0].replace(/[._]/g," ");
+        const name = rawName.charAt(0).toUpperCase() + rawName.slice(1);
+        const initials = name.split(" ").map(w=>w[0]).join("").toUpperCase().slice(0,2) || "NM";
+        window.SWAPPI.currentUser = { ...def, name, initials, email };
+      }
+      setPage("dashboard");
+      return;
+    }
+
+    if (step < 3) { setStep(step + 1); return; }
+
+    // Final signup step → build a fresh user
+    const def = window.SWAPPI?.defaultNewUser || {};
+    const name = form.name.trim() || form.email.split("@")[0];
+    const initials = name.split(" ").map(w=>w[0]).join("").toUpperCase().slice(0,2) || "NM";
+    window.SWAPPI.currentUser = { ...def, name, initials, email: form.email };
+    setPage("dashboard");
   };
 
   return (

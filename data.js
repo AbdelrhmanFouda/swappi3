@@ -110,5 +110,103 @@ window.SWAPPI = (() => {
     "GUC", "AUC", "Flat6Labs", "Instabug", "Vezeeta", "Swvl", "Rabbit", "MoneyFellows", "Trella", "Almentor"
   ];
 
-  return { skills, providers, reviews, categories, steps, trustPillars, sessions, activity, workshops, partners };
+  // ── Registered accounts ────────────────────────────────────────
+  const users = {
+    "aleyasalemm@gmail.com": {
+      name: "Aleya Salem",
+      initials: "AS",
+      email: "aleyasalemm@gmail.com",
+      password: "2003",
+      color: "blue",
+      memberSince: "Jan '25",
+      swaps: 22,
+      rating: 4.9,
+      streak: "8w",
+      verified: true,
+      bio: "Digital illustrator and French tutor based in Cairo. I believe learning should feel like discovery, not work.",
+      location: "Cairo, Egypt",
+      skills: [
+        { id:101, title:"Digital illustration — iPad & Procreate", cat:"Creative", catColor:"blue",
+          provider:"Aleya S.", initials:"AS", price:65, swap:"Arabic lessons", rating:4.9, reviews:34, mode:"Online · 1:1",
+          img:"https://images.unsplash.com/photo-1561070791-2526d30994b5?w=600&h=450&q=80&auto=format&fit=crop" },
+        { id:102, title:"French for complete beginners", cat:"Language", catColor:"orange",
+          provider:"Aleya S.", initials:"AS", price:50, swap:"Photography tips", rating:5.0, reviews:18, mode:"Online · 1:1",
+          img:"https://images.unsplash.com/photo-1549737221-bef65e2604a6?w=600&h=450&q=80&auto=format&fit=crop" },
+      ],
+      sessions: [
+        { day:"WED", date:"28", time:"7:00 PM",  title:"Arabic conversation — session 5",  with:"Yasmin H.", initials:"YH", mode:"Online",              status:"confirmed" },
+        { day:"SAT", date:"31", time:"11:00 AM", title:"Pottery wheel basics",              with:"Omar L.",   initials:"OL", mode:"Studio · Heliopolis", status:"confirmed" },
+        { day:"TUE", date:"3",  time:"6:30 PM",  title:"Film photography walk",             with:"Karim S.",  initials:"KS", mode:"In-person · Zamalek", status:"pending"   },
+      ],
+      pastSessions: [
+        { day:"MON", date:"19", time:"6:00 PM",  title:"Digital illustration — session 4", with:"Nour B.",  initials:"NB", mode:"Online", status:"completed" },
+        { day:"FRI", date:"15", time:"7:30 PM",  title:"French — session 8",               with:"Sara K.",  initials:"SK", mode:"Online", status:"completed" },
+        { day:"MON", date:"11", time:"10:00 AM", title:"Procreate brushes masterclass",    with:"Mia L.",   initials:"ML", mode:"Online", status:"completed" },
+      ],
+      activity: [
+        { who:"Nour B.",   initials:"NB", action:"left you a 5★ review",          when:"1h ago",     color:"orange" },
+        { who:"Yasmin H.", initials:"YH", action:"confirmed your booking for Wed", when:"3h ago",     color:"orange" },
+        { who:"Karim S.",  initials:"KS", action:"accepted your swap proposal",    when:"yesterday",  color:"blue"   },
+        { who:"System",    initials:"SW", action:"you reached Master rank 👑",      when:"3 days ago", color:"blue"   },
+      ],
+      messages: [
+        ["Yasmin H.","YH","Excited for Wednesday! Bring the article.","5m","orange"],
+        ["Omar L.",  "OL","Studio confirmed for the 31st — see you then!","2h","blue"],
+        ["Karim S.", "KS","Zamalek walk sounds perfect. Saturday?","Yesterday","blue"],
+      ],
+      earnings: {
+        thisMonth:"1,200", thisMonthDelta:"+340 EGP vs last",
+        allTime:"8,400",   allTimeDelta:"since Jan '25",
+        avgSession:"120",  sessionCount:"34 sessions",
+        payouts:[
+          { date:"May 1, 2026",  sessions:6, amount:"1,200", status:"paid"    },
+          { date:"Apr 1, 2026",  sessions:5, amount:"860",   status:"paid"    },
+          { date:"Mar 1, 2026",  sessions:4, amount:"780",   status:"paid"    },
+          { date:"May 10, 2026", sessions:2, amount:"400",   status:"pending" },
+        ],
+      },
+      overviewMetrics: {
+        sessions:"8",        sessionsDelta:"+3 vs last",
+        pending:"2",         pendingDelta:"1 to approve",
+        earnings:"1,200 EGP",earningsDelta:"+340 EGP wk",
+        views:"412",         viewsDelta:"+24% wk",
+      },
+    },
+  };
+
+  // ── Default profile for new / unknown logins ───────────────────
+  const defaultNewUser = {
+    name: "New Member",
+    initials: "NM",
+    email: "",
+    color: "blue",
+    memberSince: "May '26",
+    swaps: 0,
+    rating: null,
+    streak: "0w",
+    verified: false,
+    bio: "",
+    location: "",
+    skills: [],
+    sessions: [],
+    pastSessions: [],
+    activity: [
+      { who:"System", initials:"SW", action:"welcome to Swappi 🎉 — add your first skill to get started!", when:"just now", color:"orange" },
+    ],
+    messages: [],
+    earnings: {
+      thisMonth:"0", thisMonthDelta:"—",
+      allTime:"0",   allTimeDelta:"get started",
+      avgSession:"0",sessionCount:"0 sessions",
+      payouts:[],
+    },
+    overviewMetrics: {
+      sessions:"0",  sessionsDelta:"get started!",
+      pending:"0",   pendingDelta:"—",
+      earnings:"0 EGP", earningsDelta:"—",
+      views:"0",     viewsDelta:"—",
+    },
+  };
+
+  return { skills, providers, reviews, categories, steps, trustPillars, sessions, activity, workshops, partners, users, defaultNewUser };
 })();
