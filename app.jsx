@@ -1,4 +1,4 @@
-/* global React, ReactDOM, SwappiAtoms, HomePage, BrowsePage, ProfilePage, DashboardPage, WorkshopsPage, PricingPage, AuthPage, BookingModal, TweaksPanel, useTweaks, TweakSection, TweakRadio, TweakColor */
+/* global React, ReactDOM, SwappiAtoms, HomePage, BrowsePage, ProfilePage, DashboardPage, WorkshopsPage, PricingPage, AuthPage, BookingModal, TweaksPanel, useTweaks, TweakSection, TweakRadio, TweakColor, Mascot */
 const { useState, useEffect } = React;
 const { Nav, Footer } = window.SwappiAtoms;
 
@@ -104,6 +104,8 @@ function App() {
       )}
 
       {booking && <BookingModal skill={booking} onClose={closeBooking} onComplete={completeBooking}/>}
+
+      {typeof Mascot !== "undefined" && <Mascot currentPage={page}/>}
 
       {toast && (
         <div className="toast">
