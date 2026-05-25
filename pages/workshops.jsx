@@ -62,7 +62,7 @@ function WorkshopsPage({ onBook, setPage }) {
                 <Meta label="When" val="Sun · 9am"/>
                 <Meta label="Where" val="Maadi Kitchen Co-op"/>
                 <Meta label="Seats" val="6 of 8 taken"/>
-                <Meta label="Price" val="40 EGP"/>
+                <Meta label="Price" val="180 EGP"/>
               </div>
               <div className="row gap-8 mt-24">
                 <button className="btn btn-primary" onClick={() => onBook && onBook({title:"Intro to Sourdough", provider:"Hana M.", initials:"HM", price:40, mode:"In-person · Maadi", cat:"Cooking", catColor:"orange", rating:4.8})}>Reserve a seat →</button>

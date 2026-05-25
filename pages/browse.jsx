@@ -8,7 +8,7 @@ const { Avatar, Reveal, Placeholder, SkillCard } = window.SwappiAtoms;
 
 function BrowsePage({ onBook, setPage }) {
   const [cat, setCat] = useState("All");
-  const [price, setPrice] = useState(150);
+  const [price, setPrice] = useState(300);
   const [minRating, setMinRating] = useState(0);
   const [modes, setModes] = useState({ online: true, inperson: true });
   const [swapOnly, setSwapOnly] = useState(false);
@@ -71,8 +71,8 @@ function BrowsePage({ onBook, setPage }) {
       </FilterGroup>
 
       <FilterGroup title={`Max price · ${price} EGP`}>
-        <input type="range" min={20} max={200} value={price} onChange={(e)=>setPrice(+e.target.value)} style={{width:"100%", accentColor:"oklch(0.62 0.18 42)"}}/>
-        <div className="row between" style={{fontSize:11, color:"var(--ink-3)", marginTop:4}}><span>20 EGP</span><span>200 EGP</span></div>
+        <input type="range" min={150} max={300} value={price} onChange={(e)=>setPrice(+e.target.value)} style={{width:"100%", accentColor:"oklch(0.62 0.18 42)"}}/>
+        <div className="row between" style={{fontSize:11, color:"var(--ink-3)", marginTop:4}}><span>150 EGP</span><span>300 EGP</span></div>
       </FilterGroup>
 
       <FilterGroup title="Min rating">
@@ -133,7 +133,7 @@ function BrowsePage({ onBook, setPage }) {
                   <option>Price · High</option>
                 </select>
                 <button className="btn btn-sm btn-ghost" onClick={() => setFilterOpen(o=>!o)} style={{gap:6}}>
-                  ⚙ Filters{cat!=="All"||price<150||minRating>0||swapOnly ? " ·" : ""}
+                  ⚙ Filters{cat!=="All"||price<300||minRating>0||swapOnly ? " ·" : ""}
                 </button>
               </div>
             </div>
