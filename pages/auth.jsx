@@ -17,7 +17,7 @@ function AuthPage({ setPage }) {
     const e = {};
     if (step === 1) {
       if (!form.email.includes("@")) e.email = "That doesn't look right.";
-      if (form.password.length < 6) e.password = "At least 6 characters.";
+      if (mode === "signup" && form.password.length < 6) e.password = "At least 6 characters.";
     }
     if (step === 2 && mode === "signup") {
       if (!form.name.trim()) e.name = "What should we call you?";
