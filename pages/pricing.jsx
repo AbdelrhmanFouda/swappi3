@@ -8,8 +8,8 @@ const { useState } = React;
 function PricingPage({ setPage }) {
   const [annual, setAnnual] = useState(true);
 
-  const MONTHLY_EGP = 299;
-  const ANNUAL_EGP  = 199;   // per month, billed 2,388 EGP / year
+  const MONTHLY_EGP = 750;
+  const ANNUAL_EGP  = 499;   // per month, billed 5,988 EGP / year
   const price = annual ? ANNUAL_EGP : MONTHLY_EGP;
 
   const premiumFeatures = [
@@ -72,7 +72,7 @@ function PricingPage({ setPage }) {
               <span style={{position:"absolute", top:3, left:annual?27:3, width:26, height:26, borderRadius:"50%", background:"#fff", transition:"left .25s cubic-bezier(.2,.7,.2,1)", boxShadow:"var(--shadow-1)"}}></span>
             </button>
             <span style={{fontSize:14, fontWeight: annual?600:400, color: annual?"var(--ink)":"var(--ink-3)"}}>Annual</span>
-            <span className="pill pill-blue" style={{marginLeft:4}}>Save 33%</span>
+            <span className="pill pill-blue" style={{marginLeft:4}}>Save 34%</span>
           </div>
         </div>
       </section>
@@ -144,13 +144,6 @@ function PricingPage({ setPage }) {
                     <div style={{fontWeight:700, fontSize:14}}>{f.title}</div>
                     <div style={{fontSize:12, color:"var(--ink-3)", marginTop:3, lineHeight:1.5}}>{f.body}</div>
                   </div>
-                </div>
-              ))}
-              {/* Extra bullets */}
-              {["Unlimited swap matches", "Priority messaging"].map((f,i) => (
-                <div key={i} className="row gap-12 center" style={{fontSize:14}}>
-                  <span style={{width:20, height:20, borderRadius:"50%", background:"var(--blue)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:10, color:"#fff", flexShrink:0}}>✓</span>
-                  {f}
                 </div>
               ))}
             </div>
