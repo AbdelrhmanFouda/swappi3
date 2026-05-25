@@ -470,6 +470,9 @@ button { font-family: inherit; cursor: pointer; }
 /* ============================================================
    RESPONSIVE GRID HELPERS  (desktop defaults, overridden below)
    ============================================================ */
+/* compact rating row: visible only on mobile (toggled in media query) */
+.sc-rating-mob { display: none; }
+
 .grid-2     { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
 .grid-3     { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
 .grid-4     { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
@@ -510,10 +513,13 @@ button { font-family: inherit; cursor: pointer; }
   .sc-body        { padding: 10px !important; }
   .sc-title       { font-size: 14px !important; margin-bottom: 8px !important; line-height: 1.25 !important; }
   .sc-meta        { display: none !important; }
+  .sc-rating-mob  { display: flex !important; }
   .sc-swap-pill   { display: none !important; }
   .sc-per-session { display: none !important; }
   .sc-price       { font-size: 15px !important; }
   .sc-price-from  { display: none !important; }
+  /* rank badge pill */
+  .rank-badge     { font-size: 10px !important; padding: 2px 7px !important; }
 
   /* — workshop card: compact for 2-per-row */
   .wc-body        { padding: 12px !important; }

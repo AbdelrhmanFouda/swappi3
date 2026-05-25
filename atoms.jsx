@@ -1,5 +1,14 @@
-/* global React */
+/* global React, SWAPPI */
 const { useState, useEffect, useRef } = React;
+
+// ── Rank helper (shared via window) ──────────────────────────
+function getRank(swaps) {
+  if (swaps >= 20) return { label:"Master",   icon:"👑", bg:"var(--blue-soft)",   color:"var(--blue)" };
+  if (swaps >= 15) return { label:"Expert",   icon:"💎", bg:"var(--blue-soft)",   color:"var(--blue)" };
+  if (swaps >= 10) return { label:"Skilled",  icon:"⭐", bg:"var(--orange-soft)", color:"var(--orange-deep)" };
+  return             { label:"Newcomer", icon:"🌱", bg:"var(--cream-3)",    color:"var(--ink-3)" };
+}
+window.getRank = getRank;
 
 // ============================================================
 //  Shared atoms
@@ -238,39 +247,150 @@ function FootCol({ title, items, setPage }) {
 // ============================================================
 
 function SkillCard({ s, onBook }) {
+  const [showProfile, setShowProfile] = useState(false);
   return (
-    <article className="card" style={{padding: 0, overflow:"hidden", position:"relative"}}>
-      <div style={{position:"relative"}}>
-        <Placeholder label={s.cat.toUpperCase() + " · LESSON IMAGERY"} src={s.img} style={{aspectRatio:"4/3", borderRadius:0, borderWidth:0, borderBottom:"1px solid var(--line)"}}/>
-        <div style={{position:"absolute", top:10, left:10, display:"flex", gap:5}}>
-          <span className={"pill pill-" + s.catColor} style={{height:24, fontSize:11}}>{s.cat}</span>
-          {s.swap && <span className="pill sc-swap-pill" style={{background:"rgba(255,255,255,0.85)", backdropFilter:"blur(8px)", height:24, fontSize:11}}>↔ Swap</span>}
+    <>
+      <article className="card" style={{padding: 0, overflow:"hidden", position:"relative"}}>
+        <div style={{position:"relative"}}>
+          <Placeholder label={s.cat.toUpperCase() + " · LESSON IMAGERY"} src={s.img} style={{aspectRatio:"4/3", borderRadius:0, borderWidth:0, borderBottom:"1px solid var(--line)"}}/>
+          <div style={{position:"absolute", top:10, left:10, display:"flex", gap:5}}>
+            <span className={"pill pill-" + s.catColor} style={{height:24, fontSize:11}}>{s.cat}</span>
+            {s.swap && <span className="pill sc-swap-pill" style={{background:"rgba(255,255,255,0.85)", backdropFilter:"blur(8px)", height:24, fontSize:11}}>↔ Swap</span>}
+          </div>
         </div>
-      </div>
-      <div className="sc-body" style={{padding: 18}}>
-        <h3 className="sc-title" style={{fontFamily:"var(--f-serif)", fontWeight:400, fontSize:22, lineHeight:1.15, margin:"0 0 14px", letterSpacing:"-0.01em"}}>{s.title}</h3>
-        <div className="row between center sc-meta" style={{marginTop:8}}>
-          <div className="row gap-8 center">
-            <Avatar initials={s.initials} size="sm" />
-            <div className="col">
-              <span style={{fontSize:13, fontWeight:500}}>{s.provider}</span>
-              <span style={{fontSize:11, color:"var(--ink-3)"}}>{s.mode}</span>
+        <div className="sc-body" style={{padding: 18}}>
+          <h3 className="sc-title" style={{fontFamily:"var(--f-serif)", fontWeight:400, fontSize:22, lineHeight:1.15, margin:"0 0 14px", letterSpacing:"-0.01em"}}>{s.title}</h3>
+
+          {/* Full meta row — desktop */}
+          <div className="row between center sc-meta" style={{marginTop:8, cursor:"pointer"}} onClick={() => setShowProfile(true)}>
+            <div className="row gap-8 center">
+              <Avatar initials={s.initials} size="sm" />
+              <div className="col">
+                <span style={{fontSize:13, fontWeight:500}}>{s.provider}</span>
+                <span style={{fontSize:11, color:"var(--ink-3)"}}>{s.mode}</span>
+              </div>
+            </div>
+            <div className="col" style={{alignItems:"flex-end"}}>
+              <Rating value={s.rating} />
+              <span style={{fontSize:11, color:"var(--ink-3)"}}>{s.reviews} reviews</span>
             </div>
           </div>
-          <div className="col" style={{alignItems:"flex-end"}}>
-            <Rating value={s.rating} />
-            <span style={{fontSize:11, color:"var(--ink-3)"}}>{s.reviews} reviews</span>
+
+          {/* Compact rating row — mobile only */}
+          <div className="row between center sc-rating-mob" style={{marginTop:6}}>
+            <span style={{fontSize:12, fontWeight:700, color:"var(--orange)"}}>
+              ★ {s.rating.toFixed(1)}
+              <span style={{fontWeight:400, color:"var(--ink-3)", fontSize:11}}> ({s.reviews})</span>
+            </span>
+            <button onClick={() => setShowProfile(true)} style={{background:"none", border:"none", cursor:"pointer", fontSize:11, color:"var(--blue)", padding:0, fontWeight:600}}>
+              View profile
+            </button>
+          </div>
+
+          <div className="row between center" style={{marginTop:14, paddingTop:12, borderTop:"1px solid var(--line-soft)"}}>
+            <div>
+              <span className="sc-price-from" style={{fontSize:11, color:"var(--ink-3)", textTransform:"uppercase", letterSpacing:".1em"}}>From</span>
+              <div className="sc-price" style={{fontSize:18, fontWeight:600}}>${s.price}<span className="sc-per-session" style={{fontSize:13, color:"var(--ink-3)", fontWeight:400}}> / session</span></div>
+            </div>
+            <button className="btn btn-sm btn-primary" onClick={() => onBook && onBook(s)}>Book →</button>
           </div>
         </div>
-        <div className="row between center" style={{marginTop:14, paddingTop:12, borderTop:"1px solid var(--line-soft)"}}>
-          <div>
-            <span className="sc-price-from" style={{fontSize:11, color:"var(--ink-3)", textTransform:"uppercase", letterSpacing:".1em"}}>From</span>
-            <div className="sc-price" style={{fontSize:18, fontWeight:600}}>${s.price}<span className="sc-per-session" style={{fontSize:13, color:"var(--ink-3)", fontWeight:400}}> / session</span></div>
+      </article>
+
+      {showProfile && <TeacherProfileModal s={s} onClose={() => setShowProfile(false)} onBook={onBook}/>}
+    </>
+  );
+}
+
+function TeacherProfileModal({ s, onClose, onBook }) {
+  // Derive a stable swap count from provider name characters
+  const swapCount = s.provider.split("").reduce((a, c) => a + c.charCodeAt(0), 0) % 18 + 8;
+  const rank = getRank(swapCount);
+  const otherSkills = (window.SWAPPI?.skills || []).filter(sk => sk.provider === s.provider && sk.id !== s.id).slice(0, 3);
+  const mockReviews = [
+    { name:"Sarah K.",  text:"Absolutely brilliant — came prepared, explained clearly.", stars:5, days:3  },
+    { name:"Ahmed R.",  text:"Very patient and knowledgeable. Would book again in a heartbeat.", stars:5, days:7  },
+    { name:"Nora L.",   text:"Great session, learned more than I expected. Highly recommended.", stars:4, days:14 },
+  ];
+  return (
+    <div className="modal-veil" onClick={onClose}>
+      <div className="modal" onClick={e=>e.stopPropagation()} style={{maxWidth:520, padding:0, overflow:"hidden"}}>
+
+        {/* Header */}
+        <div style={{padding:"24px 24px 20px"}}>
+          <div className="row between center" style={{marginBottom:20}}>
+            <div className="row gap-14 center">
+              <Avatar initials={s.initials} size="lg" color={s.catColor} verified/>
+              <div>
+                <div className="row gap-8 center" style={{flexWrap:"wrap"}}>
+                  <span style={{fontSize:20, fontWeight:700}}>{s.provider}</span>
+                  <span style={{background:rank.bg, color:rank.color, borderRadius:99, fontSize:11, fontWeight:700, padding:"3px 9px"}}>
+                    {rank.icon} {rank.label}
+                  </span>
+                </div>
+                <div style={{fontSize:12, color:"var(--ink-3)", marginTop:4}}>{s.mode}</div>
+              </div>
+            </div>
+            <button onClick={onClose} style={{background:"none", border:"none", fontSize:24, color:"var(--ink-3)", cursor:"pointer", flexShrink:0}}>×</button>
           </div>
-          <button className="btn btn-sm btn-primary" onClick={() => onBook && onBook(s)}>Book →</button>
+
+          {/* Stats */}
+          <div style={{display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:10}}>
+            {[
+              {label:"Rating",    val: s.rating.toFixed(1)+" ★"},
+              {label:"Reviews",   val: s.reviews},
+              {label:"Swaps",     val: swapCount},
+            ].map((st,i) => (
+              <div key={i} style={{padding:"12px 10px", borderRadius:10, background:"var(--cream-2)", textAlign:"center"}}>
+                <div style={{fontSize:20, fontWeight:800}}>{st.val}</div>
+                <div style={{fontSize:10, color:"var(--ink-3)", textTransform:"uppercase", letterSpacing:".1em", marginTop:2}}>{st.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Scrollable body */}
+        <div style={{padding:"0 24px 24px", maxHeight:340, overflowY:"auto"}}>
+          {otherSkills.length > 0 && (
+            <>
+              <div style={{fontSize:11, fontWeight:700, textTransform:"uppercase", letterSpacing:".1em", color:"var(--ink-3)", marginBottom:10}}>Also teaches</div>
+              <div className="col gap-8" style={{marginBottom:20}}>
+                {otherSkills.map((sk,i) => (
+                  <div key={i} className="row between center" style={{padding:"10px 14px", background:"var(--cream-2)", borderRadius:10}}>
+                    <div>
+                      <div style={{fontSize:13, fontWeight:600}}>{sk.title}</div>
+                      <div style={{fontSize:11, color:"var(--ink-3)"}}>{sk.mode} · ${sk.price}/session</div>
+                    </div>
+                    <button className="btn btn-sm btn-ghost" onClick={() => { onClose(); onBook && onBook(sk); }}>Book</button>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+
+          <div style={{fontSize:11, fontWeight:700, textTransform:"uppercase", letterSpacing:".1em", color:"var(--ink-3)", marginBottom:10}}>Recent reviews</div>
+          <div className="col gap-8">
+            {mockReviews.map((r,i) => (
+              <div key={i} style={{padding:"12px 14px", background:"var(--cream-2)", borderRadius:10}}>
+                <div className="row between center" style={{marginBottom:6}}>
+                  <span style={{fontSize:13, fontWeight:600}}>{r.name}</span>
+                  <span style={{color:"var(--orange)", fontSize:12, letterSpacing:1}}>{"★".repeat(r.stars)}</span>
+                </div>
+                <p style={{fontSize:13, color:"var(--ink-2)", margin:0, lineHeight:1.5}}>"{r.text}"</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* CTA footer */}
+        <div style={{padding:"16px 24px", borderTop:"1px solid var(--line)", display:"flex", gap:10}}>
+          <button className="btn btn-ghost" style={{flex:1, justifyContent:"center"}} onClick={onClose}>Close</button>
+          <button className="btn btn-primary" style={{flex:2, justifyContent:"center"}} onClick={() => { onClose(); onBook && onBook(s); }}>
+            Book a session →
+          </button>
         </div>
       </div>
-    </article>
+    </div>
   );
 }
 

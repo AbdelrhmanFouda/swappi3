@@ -27,20 +27,28 @@ function DashboardPage({ setPage, onBook }) {
         {/* ── Sidebar (desktop only) ── */}
         {!isMobile && (
           <aside style={{background:"var(--paper)", borderRight:"1px solid var(--line)", padding:"32px 20px", position:"sticky", top:64, alignSelf:"flex-start", height:"calc(100vh - 64px)", overflowY:"auto"}}>
-            <div className="card" style={{padding:16, background:"var(--cream-2)", border:"none"}}>
-              <div className="row gap-12 center">
-                <Avatar initials="YO" size="md" color="orange" verified />
-                <div>
-                  <div style={{fontSize:14, fontWeight:700}}>You</div>
-                  <div style={{fontSize:11, color:"var(--ink-3)"}}>Member since '24</div>
+            {(() => {
+              const rank = window.getRank ? window.getRank(14) : {label:"Skilled", icon:"⭐", bg:"var(--orange-soft)", color:"var(--orange-deep)"};
+              return (
+                <div className="card" style={{padding:16, background:"var(--cream-2)", border:"none"}}>
+                  <div className="row gap-12 center">
+                    <Avatar initials="YO" size="md" color="orange" verified />
+                    <div>
+                      <div style={{fontSize:14, fontWeight:700}}>You</div>
+                      <div style={{fontSize:11, color:"var(--ink-3)", marginBottom:4}}>Member since '24</div>
+                      <span style={{background:rank.bg, color:rank.color, borderRadius:99, fontSize:10, fontWeight:700, padding:"2px 8px"}}>
+                        {rank.icon} {rank.label}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="row gap-16" style={{marginTop:16, paddingTop:14, borderTop:"1px solid var(--line)"}}>
+                    <Mini label="Swaps" val="14" />
+                    <Mini label="Rating" val="4.8★" />
+                    <Mini label="Streak" val="6w" />
+                  </div>
                 </div>
-              </div>
-              <div className="row gap-16" style={{marginTop:16, paddingTop:14, borderTop:"1px solid var(--line)"}}>
-                <Mini label="Swaps" val="14" />
-                <Mini label="Rating" val="4.8★" />
-                <Mini label="Streak" val="6w" />
-              </div>
-            </div>
+              );
+            })()}
             <nav className="col gap-4" style={{marginTop:24}}>
               {navItems.map(([id, label, icon]) => (
                 <button key={id} onClick={() => setSection(id)} style={{
@@ -64,18 +72,26 @@ function DashboardPage({ setPage, onBook }) {
         )}
 
         {/* ── Mobile profile strip ── */}
-        {isMobile && (
-          <div style={{background:"var(--paper)", borderBottom:"1px solid var(--line)", padding:"14px 16px"}}>
-            <div className="row gap-12 center">
-              <Avatar initials="YO" size="md" color="orange" verified />
-              <div style={{flex:1}}>
-                <div style={{fontSize:15, fontWeight:700}}>You</div>
-                <div style={{fontSize:12, color:"var(--ink-3)"}}>14 swaps · 4.8★ · 6-week streak</div>
+        {isMobile && (() => {
+          const rank = window.getRank ? window.getRank(14) : {label:"Skilled", icon:"⭐", bg:"var(--orange-soft)", color:"var(--orange-deep)"};
+          return (
+            <div style={{background:"var(--paper)", borderBottom:"1px solid var(--line)", padding:"14px 16px"}}>
+              <div className="row gap-12 center">
+                <Avatar initials="YO" size="md" color="orange" verified />
+                <div style={{flex:1}}>
+                  <div className="row gap-8 center">
+                    <span style={{fontSize:15, fontWeight:700}}>You</span>
+                    <span style={{background:rank.bg, color:rank.color, borderRadius:99, fontSize:11, fontWeight:700, padding:"2px 8px"}}>
+                      {rank.icon} {rank.label}
+                    </span>
+                  </div>
+                  <div style={{fontSize:12, color:"var(--ink-3)", marginTop:2}}>14 swaps · 4.8★ · 6-week streak</div>
+                </div>
+                <button className="btn btn-sm btn-primary" onClick={() => setPage("pricing")}>Go Pro</button>
               </div>
-              <button className="btn btn-sm btn-primary" onClick={() => setPage("pricing")}>Go Pro</button>
             </div>
-          </div>
-        )}
+          );
+        })()}
 
         {/* ── Main content ── */}
         <section style={{padding: isMobile ? "20px 16px 110px" : "40px 48px", overflowY:"auto"}}>

@@ -46,7 +46,7 @@ function HomeHero({ setPage }) {
           <Reveal delay={240}>
             <div className="row mob-col gap-12 center" style={{justifyContent:"center", marginTop:40}}>
               <button className="btn btn-lg btn-primary mob-full" onClick={() => setPage("browse")}>Find a skill to learn →</button>
-              <button className="btn btn-lg btn-ghost mob-full" onClick={() => setPage("auth")}>I want to teach</button>
+              <button className="btn btn-lg btn-ghost mob-full" onClick={() => setPage("auth")} style={{color:"#fff", borderColor:"rgba(255,255,255,0.55)", background:"rgba(255,255,255,0.08)"}}>I want to teach</button>
             </div>
           </Reveal>
         </div>
