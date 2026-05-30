@@ -10,7 +10,7 @@ function BrowsePage({ onBook, setPage }) {
   const [cat, setCat] = useState("All");
   const [price, setPrice] = useState(300);
   const [minRating, setMinRating] = useState(0);
-  const [modes, setModes] = useState({ online: true, inperson: true });
+  const [modes, setModes] = useState({ online: true });
   const [swapOnly, setSwapOnly] = useState(false);
   const [sort, setSort] = useState("Recommended");
   const [loading, setLoading] = useState(true);
@@ -31,7 +31,6 @@ function BrowsePage({ onBook, setPage }) {
       if (s.rating < minRating) return false;
       if (swapOnly && !s.swap) return false;
       if (!modes.online && s.mode.startsWith("Online")) return false;
-      if (!modes.inperson && s.mode.startsWith("In-person")) return false;
       if (query && !s.title.toLowerCase().includes(query.toLowerCase()) && !s.provider.toLowerCase().includes(query.toLowerCase())) return false;
       return true;
     });
@@ -42,8 +41,8 @@ function BrowsePage({ onBook, setPage }) {
   }, [cat, price, minRating, modes, swapOnly, sort, query]);
 
   const resetFilters = () => {
-    setCat("All"); setPrice(150); setMinRating(0);
-    setModes({online:true,inperson:true}); setSwapOnly(false); setQuery("");
+    setCat("All"); setPrice(300); setMinRating(0);
+    setModes({online:true}); setSwapOnly(false); setQuery("");
   };
 
   const FiltersPane = () => (
@@ -86,8 +85,6 @@ function BrowsePage({ onBook, setPage }) {
       </FilterGroup>
 
       <FilterGroup title="Format">
-        <CheckRow label="Online" checked={modes.online} onChange={()=>setModes(m=>({...m, online:!m.online}))}/>
-        <CheckRow label="In-person" checked={modes.inperson} onChange={()=>setModes(m=>({...m, inperson:!m.inperson}))}/>
         <CheckRow label="Swap-friendly only" checked={swapOnly} onChange={()=>setSwapOnly(s=>!s)}/>
       </FilterGroup>
 

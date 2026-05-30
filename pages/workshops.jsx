@@ -18,7 +18,6 @@ function WorkshopsPage({ onBook, setPage }) {
     return SWAPPI.workshops.filter(w => {
       if (filter === "All") return true;
       if (filter === "Online") return w.location.toLowerCase().includes("online");
-      if (filter === "In-person") return !w.location.toLowerCase().includes("online");
       if (filter === "This week") return thisWeekTitles.has(w.title);
       return true;
     });
@@ -31,10 +30,10 @@ function WorkshopsPage({ onBook, setPage }) {
           <span className="eyebrow">Workshops · weekly drops</span>
           <div className="row between" style={{flexWrap:"wrap", gap:24, marginTop:12}}>
             <h1 className="display" style={{fontSize:"clamp(40px,6vw,80px)", margin:0, maxWidth:900}}>
-              Small groups. Real rooms. <span style={{color:"var(--orange)"}}>Done in a weekend.</span>
+              Small groups. Live sessions. <span style={{color:"var(--orange)"}}>Done in a weekend.</span>
             </h1>
             <div className="row mob-wrap gap-8" style={{alignItems:"flex-end"}}>
-              {["All","Online","In-person","This week"].map(f => (
+              {["All","Online","This week"].map(f => (
                 <button key={f} className="pill" onClick={() => setFilter(f)} style={{
                   cursor:"pointer", height:36, padding:"0 16px",
                   background: filter===f ? "var(--ink)" : "var(--paper)",
@@ -48,24 +47,24 @@ function WorkshopsPage({ onBook, setPage }) {
       </section>
 
       {/* Featured */}
-      {(filter === "All" || filter === "In-person" || filter === "This week") && (
+      {(filter === "All" || filter === "This week") && (
         <section className="wrap">
           <div className="card" style={{padding:0, overflow:"hidden", display:"grid", gridTemplateColumns: isMobile ? "1fr" : "1.1fr 1fr", minHeight: isMobile ? "auto" : 380}}>
             <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=700&h=420&q=80&auto=format&fit=crop" alt="Sourdough workshop" style={{width:"100%", aspectRatio: isMobile ? "3/2" : "auto", height: isMobile ? "auto" : "100%", objectFit:"cover", objectPosition:"center 50%", display:"block"}} />
             <div style={{padding: isMobile ? 24 : 48, display:"flex", flexDirection:"column", justifyContent:"center"}}>
               <span className="pill pill-orange">★ This weekend</span>
-              <h2 className="display" style={{fontSize: isMobile ? 28 : 44, fontWeight:400, margin:"16px 0 12px", lineHeight:1.1}}>Intro to Sourdough — Sunday, Maadi</h2>
+              <h2 className="display" style={{fontSize: isMobile ? 28 : 44, fontWeight:400, margin:"16px 0 12px", lineHeight:1.1}}>Intro to Sourdough — Sunday, Online</h2>
               <p style={{color:"var(--ink-3)", fontSize:16, lineHeight:1.6, margin:0}}>
-                Three hours with Hana in a working kitchen. You'll leave with a starter, a loaf, and the confidence to keep going.
+                Three hours with Hana, live on video. You'll walk away with a starter recipe, a full baking guide, and the confidence to keep going.
               </p>
               <div className="row mob-wrap gap-24 mt-24" style={{paddingTop:20, borderTop:"1px solid var(--line)"}}>
                 <Meta label="When" val="Sun · 9am"/>
-                <Meta label="Where" val="Maadi Kitchen Co-op"/>
+                <Meta label="Where" val="Online · Zoom"/>
                 <Meta label="Seats" val="6 of 8 taken"/>
                 <Meta label="Price" val="180 EGP"/>
               </div>
               <div className="row gap-8 mt-24">
-                <button className="btn btn-primary" onClick={() => onBook && onBook({title:"Intro to Sourdough", provider:"Hana M.", initials:"HM", price:40, mode:"In-person · Maadi", cat:"Cooking", catColor:"orange", rating:4.8})}>Reserve a seat →</button>
+                <button className="btn btn-primary" onClick={() => onBook && onBook({title:"Intro to Sourdough", provider:"Hana M.", initials:"HM", price:180, mode:"Online · Zoom", cat:"Cooking", catColor:"orange", rating:4.8})}>Reserve a seat →</button>
                 <button className="btn btn-ghost" onClick={() => setDetail(SWAPPI.workshops[1])}>Read full details</button>
               </div>
             </div>
@@ -99,7 +98,7 @@ function WorkshopsPage({ onBook, setPage }) {
                 }
                 <div className="wc-body" style={{padding:20}}>
                   <div className="row gap-6">
-                    <span className="pill pill-blue" style={{height:24, fontSize:11}}>{w.location.toLowerCase().includes("online") ? "Online" : "In-person"}</span>
+                    <span className="pill pill-blue" style={{height:24, fontSize:11}}>Online</span>
                     <span className="pill" style={{height:24, fontSize:11}}>{w.seats - w.taken} left</span>
                   </div>
                   <h3 className="wc-title" style={{fontFamily:"var(--f-serif)", fontWeight:400, fontSize:22, lineHeight:1.15, margin:"14px 0 6px"}}>{w.title}</h3>
@@ -161,7 +160,7 @@ function WorkshopDetailModal({ w, onClose, onBook }) {
         {w.img && <img src={w.img} alt={w.title} style={{width:"100%", height:240, objectFit:"cover", borderRadius:"20px 20px 0 0"}}/>}
         <div style={{padding:32}}>
           <div className="row gap-8" style={{marginBottom:16}}>
-            <span className="pill pill-blue">{w.location.toLowerCase().includes("online")?"Online":"In-person"}</span>
+            <span className="pill pill-blue">Online</span>
             <span className="pill pill-orange">{w.seats - w.taken} seats left</span>
           </div>
           <h2 style={{fontFamily:"var(--f-serif)", fontWeight:400, fontSize:32, margin:"0 0 12px", lineHeight:1.1}}>{w.title}</h2>
